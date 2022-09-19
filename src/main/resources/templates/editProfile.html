@@ -1,0 +1,19 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="layout/main.html">
+<div layout:fragment="pageContent">
+    <div th:id="'resultChangePassword'"></div>
+    <div class="bg-white p-3" style="border-radius: 5px" id="passwordInputs">
+        <div class="d-flex justify-content-between">
+            <label class="text-secondary d-flex align-items-center">Password</label>
+            <label class="d-flex align-items-center" th:if="${#authentication.getPrincipal().updatedAt!=null}"  th:text="${#authentication.getPrincipal().updatedAt}">
+            </label>
+            <label class="d-flex align-items-center" th:if="${#authentication.getPrincipal().updatedAt==null}" th:text="${#authentication.getPrincipal().createdAt}">
+            </label>
+            <a onclick="inputForms()" class="btn btn-outline-dark">Change Password</a>
+        </div>
+    </div>
+    <script type="text/javascript" th:src="'editProfile.js'"></script>
+</div>
+</html>

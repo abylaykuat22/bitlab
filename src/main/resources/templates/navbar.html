@@ -1,0 +1,67 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<div style="background-color: #0c0f66; height: auto; padding: 5px">
+    <div class="container col-6 mx-auto">
+        <div class="row">
+            <div class="col-2">
+                <img src="/pictures/logo.png" th:href="@{'/'}" style="width: 72%">
+            </div>
+            <div class="col-10 d-flex justify-content-between" >
+                <form class="d-flex col-4" role="search" style="padding-right: 5px">
+                    <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
+                </form>
+                <div class="dropdown d-flex col-8 justify-content-end">
+                    <div id="check"></div>
+                    <a class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="userPicture">
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{'/profile'}">My Profile</a></li>
+                        <li><a class="dropdown-item" th:href="@{'/editProfile'}">Edit Profile</a></li>
+                        <li sec:authorize="hasAnyRole('ROLE_ADMIN')"><a class="dropdown-item" th:href="@{'/admin/index'}">Admin Panel</a></li>
+                        <hr>
+                        <li><a class="dropdown-item" th:href="@{'/signout'}">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function loadData(){
+            loadPictures();
+            check();
+        }
+
+        function loadPictures() {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function () {
+                var avatarPicture = JSON.parse(this.responseText);
+                for (let i = 0; i < avatarPicture.length; i++) {
+                    if ([[${#authentication.getPrincipal().getId()}]] == avatarPicture[i].user.id && avatarPicture[i].rolePicture == 'ROLE_PROFILE'){
+                        var avaHTML = ""
+                        avaHTML+="<img src=\"/getPictures/"+avatarPicture[i].picture+"\" style='width: 44px; height: 40px; border-radius: 40px'>"
+                        document.getElementById("userPicture").innerHTML = avaHTML;
+                    }
+                }
+            }
+            xhttp.open("GET", "http://localhost:8000/picture")
+            xhttp.send();
+        }
+
+
+        function check(){
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function () {
+                var avatarPicture = JSON.parse(this.responseText);
+                if (avatarPicture===false){
+                    var avaHTML = ""
+                    avaHTML+="<img src='/getDefaultAvatar' style='width: 44px; height: 40px; border-radius: 40px'>"
+                    document.getElementById("check").innerHTML = avaHTML;
+                }
+            }
+            xhttp.open("GET", "http://localhost:8000/picture/avatar")
+            xhttp.send();
+        }
+    </script>
+</div>
+</html>

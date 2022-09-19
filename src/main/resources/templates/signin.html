@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:insert="~{head.html}"></head>
+<body style="background-color: rgb(225,225,225);">
+<div class="container col-6 mx-auto">
+    <div class="row" style="margin-top: 150px">
+        <div class="col-6" style="margin-top: 40px">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="text-center" style="color: #0c0f66"><strong>BITLAB</strong></h1>
+                </div>
+                <div class="col-12">
+                    <h3 class="text-center">Connect with friends to keep up with all the news in programming</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div id='addNewPasswordResult'></div>
+            <div class="col-10 mx-auto bg-white p-3" style="border-radius: 5px" th:id="'codeWord'">
+                <form th:action="@{'/auth'}" method="post">
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <input type="email" name="user_email" class="form-control" placeholder="Email" required>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <input type="password" name="user_password" class="form-control" placeholder="Password"
+                                   required>
+                            <div class="text-danger text-center" th:if="${param.error1!=null}">
+                                Incorrect email or password! Try again!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary form-control">SIGN IN</button>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 text-center">
+                            <a href="#" onclick="resetPassword()">Forgot Password?</a>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <!-- Кнопка-триггер модального окна -->
+                        <button class="btn btn-success form-control" onclick="openAddModal()">
+                            SIGN UP
+                        </button>
+
+                        <!-- Модальное окно -->
+
+                        <div class="modal fade" id="addModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div th:id="addSuccess"></div>
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title" id="staticBackdropLabel">
+                                            <strong>SIGN UP</strong>
+                                            <p style="font-size: 15px">It's quick and easy.</p>
+                                        </h1>
+                                        <div style="padding-bottom: 50px">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Закрыть"></button>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <input type="text" class="form-control" id="fullname"
+                                                       placeholder="Full name">
+                                            </div>
+                                            <div class="col-12 mt-2">
+                                                <input type="email" class="form-control" id="email"
+                                                       placeholder="Email">
+                                            </div>
+                                            <div class="col-12 mt-2">
+                                                <input type="password" class="form-control" id="password"
+                                                       placeholder="Password">
+                                            </div>
+                                            <div class="col-12 mt-2">
+                                                <input type="password" class="form-control" id="re_password"
+                                                       placeholder="Repeat password">
+                                            </div>
+                                            <div th:id="errorPassword" class="text-center text-danger"></div>
+                                            <div class="col-12 mt-2">
+                                                <label class="text-secondary"
+                                                       style="font-size: 15px">Birthdate?</label>
+                                                <input type="date" class="form-control" id="birthdate"
+                                                       required>
+                                            </div>
+                                            <div class="col-12 mt-2">
+                                                <div>
+                                                    <label class="text-secondary"
+                                                           style="font-size: 15px">Gender?</label>
+                                                </div>
+                                                <div class="form-check form-check-inline form-control"
+                                                     style="width: 49%;margin-right: 0px;padding-left: 35px;">
+                                                    <input class="form-check-input col-6" type="radio" th:value="'MALE'"
+                                                           name="gender">
+                                                    <label class="form-check-label" th:text="'MALE'"></label>
+                                                </div>
+                                                <div class="form-check form-check-inline form-control"
+                                                     style="width: 49%;margin-right: 0px;padding-left: 35px; margin-left: 4px;">
+                                                    <input class="form-check-input col-6" type="radio"
+                                                           th:value="'FEMALE'" name="gender">
+                                                    <label class="form-check-label" th:text="'FEMALE'"></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mt-2">
+                                                <label class="text-secondary"
+                                                       style="font-size: 15px">Сode word will help you if you forget your password.</label>
+                                                <input type="text" class="form-control" id="code_word" name="codeWord"
+                                                       placeholder="Code word">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button onclick="addUser()" class="btn btn-success form-control">CREATE NEW
+                                            ACCOUNT
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-center text-secondary mt-1">Create a page to join the community</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="resetPasswordModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" style="width: 830px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="staticBackdropLabe1l">
+                        <strong>RESET PASSWORD</strong>
+                    </h1>
+                    <div style="padding-bottom: 50px">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="hidden" th:id="'user_email'">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="password" th:id="'new_password'" class="form-control"
+                                   placeholder="New password" required>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <input type="password" th:id="'re_new_password'" class="form-control"
+                                   placeholder="Repeat new password" required>
+                            <div th:id="'newPasswordError'" class="text-center text-danger"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="addNewPassword()" class="btn btn-success form-control">ADD NEW PASSWORD
+                    </button>
+                </div>
+                <script type="text/javascript" th:src="'signinPage.js'"></script>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
+

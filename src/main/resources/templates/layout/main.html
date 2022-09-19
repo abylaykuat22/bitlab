@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head onload="">
+    <link th:insert="~{head.html}">
+    <meta charset="UTF-8">
+</head>
+<body style="background-color: rgb(225,225,225); min-height: 1000px; font-family: system-ui" onload="loadData(); loadProfileData();" >
+<div class="container-fluid">
+    <div class="row" th:insert="~{navbar.html}" sec:authorize="isAuthenticated()"></div>
+    <div class="row" th:insert="~{signin.html}" sec:authorize="isAnonymous()"></div>
+    <div class="row">
+        <div class="container col-6 mx-auto">
+            <div class="row">
+                <div class="col-2" th:insert="~{leftbar.html}" sec:authorize="isAuthenticated()" style="background-color: #ededed;"></div>
+                <div class="col-10 mt-3" layout:fragment="pageContent" sec:authorize="isAuthenticated()"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

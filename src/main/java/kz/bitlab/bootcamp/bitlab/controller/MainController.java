@@ -1,0 +1,146 @@
+package kz.bitlab.bootcamp.bitlab.controller;
+
+import kz.bitlab.bootcamp.bitlab.Courier.Courier;
+import kz.bitlab.bootcamp.bitlab.model.Likes;
+import kz.bitlab.bootcamp.bitlab.model.News;
+import kz.bitlab.bootcamp.bitlab.services.*;
+import liquibase.pro.packaged.E;
+import liquibase.pro.packaged.M;
+import org.apache.commons.io.IOUtils;
+import org.hibernate.mapping.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+
+@Controller
+public class MainController {
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PictureService pictureService;
+    @Autowired
+    private NewsService newsService;
+    @Autowired
+    private FileUploadService fileUploadService;
+    @Autowired
+    private LikesService likesService;
+    @Value("${loadUrl}")
+    private String loadUrl;
+
+    @GetMapping(value = "/")
+    public String startPage(Model model) {
+        if (userService.getCurrentUser() != null) {
+            return "index";
+        }
+        return "signin";
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @GetMapping(value = "/signin")
+    public String signinPage() {
+        return "signin";
+    }
+
+    @GetMapping(value = "/forbidden")
+    public String forbiddenPage() {
+        return "forbidden";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value = "/profile")
+    public String profilePage(Model model) {
+        model.addAttribute("avatarPicture", userService.avatarPicture());
+        model.addAttribute("pictures", pictureService.getPictures());
+        model.addAttribute("likes", likesService.allLikes());
+        return "profile";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value = "/editProfile")
+    public String editProfilePage() {
+        return "editProfile";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value = "/friends")
+    public String friendsPage(){
+        return "friends";
+    }
+
+    @GetMapping(value = "/getPictures/{token}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public @ResponseBody byte[] getAvatar(@PathVariable(name = "token", required = false) String token) throws IOException {
+        String pictureUrl = loadUrl + "default.jpg";
+        if (token != null) {
+            pictureUrl = loadUrl + token + ".jpg";
+        }
+        InputStream in = null;
+        try {
+            ClassPathResource resource = new ClassPathResource(pictureUrl);
+            in = resource.getInputStream();
+        } catch (Exception e) {
+            pictureUrl = loadUrl + "default.jpg";
+            e.printStackTrace();
+        }
+        return IOUtils.toByteArray(in);
+    }
+
+    @GetMapping(value = "/getDefaultAvatar", produces = MediaType.IMAGE_JPEG_VALUE)
+    public @ResponseBody byte[] getDefaultAvatar(@PathVariable(name = "token", required = false) String token) throws IOException {
+        String pictureUrl = loadUrl + "default.jpg";
+        if (token != null) {
+            pictureUrl = loadUrl + token + ".jpg";
+        }
+        InputStream in = null;
+        try {
+            ClassPathResource resource = new ClassPathResource(pictureUrl);
+            in = resource.getInputStream();
+        } catch (Exception e) {
+            pictureUrl = loadUrl + "default.jpg";
+            e.printStackTrace();
+        }
+        return IOUtils.toByteArray(in);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/uploadAvatar")
+    public String uploadAvatar(@RequestParam(name = "user_ava") MultipartFile file,
+                               Courier courier){
+        userService.deleteUserAvatar();
+        if (file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/png")) {
+            fileUploadService.uploadProfilePicture(file, courier);
+        }
+        return "redirect:/profile";
+    };
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/newPortfolioPhoto")
+    public String newPhoto(@RequestParam(name = "id") Long id,
+                           @RequestParam(name = "photo") MultipartFile file,
+                           Courier courier){
+        if (file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/png")) {
+            fileUploadService.uploadProfilePicture(file, courier);
+        }
+        return "redirect:/profile";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/addNews")
+    public String newPhoto(@RequestParam(name = "news_picture") MultipartFile file,
+                           Courier courier){
+        if (file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/png") || file.isEmpty()) {
+            newsService.addNews(file, courier);
+        }
+
+        return "redirect:/profile";
+    }
+}

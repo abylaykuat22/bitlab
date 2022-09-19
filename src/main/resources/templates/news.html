@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="layout/main.html">
+<head th:insert="~{head.html}"></head>
+<div layout:fragment="pageContent">
+    <div class="bg-white p-3" style="border-radius: 5px">
+        <div th:each="n:${news}" th:if="${n.user.id==#authentication.getPrincipal().id}" class="mb-3">
+            <div>
+                <div>
+                    <div th:each="p:${pictures}" th:if="${p.user.id == #authentication.getPrincipal().id and p.rolePicture=='ROLE_PROFILE'}" class="d-flex">
+                        <div style="padding-right: 11px">
+                            <img th:src="${p.picture}" style="width: 60px;height: 55px;border-radius: 60px;">
+                        </div>
+                        <div>
+                            <p style="margin-bottom: 0px"><strong th:text="${#authentication.getPrincipal().fullName}"></strong></p>
+                            <p th:text="${n.createdAt}" style="font-size: 12px;color: grey;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p th:text="${n.description}" class="mt-2"></p>
+            <div class="mt-2" th:each="picNews:${n.pictures}">
+                <img th:src="${picNews.picture}" style="width: 100%; border-radius: 5px">
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
