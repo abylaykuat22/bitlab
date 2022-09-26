@@ -1,3 +1,0 @@
--- INSERT INTO news_pictures(news_id, pictures_id)
--- VALUES (3, 12),
---        (4, 13);

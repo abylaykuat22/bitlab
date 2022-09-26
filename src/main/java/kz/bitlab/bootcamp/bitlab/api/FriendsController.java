@@ -15,7 +15,6 @@ import java.util.List;
 @RequestMapping(value = "/friends_controller")
 @RequiredArgsConstructor
 public class FriendsController {
-    private final UserService userService;
     private final FriendsService friendsService;
 
     @GetMapping
