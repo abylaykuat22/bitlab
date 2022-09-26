@@ -27,17 +27,15 @@ public class FileUploadServiceImpl implements FileUploadService {
     private UserService userService;
     @Value("${targetUrl}")
     private String targetUrl;
+
     @Override
     public boolean uploadProfilePicture(MultipartFile file, Courier courier) {
         try {
             Picture picture = new Picture();
             picture.setUser(userService.getCurrentUser());
             picture.setPicture("empty");
-            if (courier.getRolePicture().equals("ROLE_PROFILE")){
-                picture.setRolePicture("ROLE_PROFILE");
-            }else if (courier.getRolePicture().equals("ROLE_PORTFOLIO")){
-                picture.setRolePicture("ROLE_PORTFOLIO");
-            }
+            picture.setRolePicture("empty");
+            picture.setAmountLikes(0);
             pictureService.updateProfilePicture(picture);
             String fileToken = DigestUtils.sha1Hex(picture.getId()+ "_#!?");
             String fileName = fileToken+".jpg";
@@ -45,9 +43,14 @@ public class FileUploadServiceImpl implements FileUploadService {
             Path path = Paths.get(targetUrl+"/", fileName);
             Files.write(path, bytes);
             Picture newPicture = pictureService.getPictureById(picture.getId());
+            if (courier.getRolePicture().equals("ROLE_PROFILE")){
+                picture.setRolePicture("ROLE_PROFILE");
+                userService.getCurrentUser().setStatusAvatar(fileToken);
+            }else if (courier.getRolePicture().equals("ROLE_PORTFOLIO")){
+                picture.setRolePicture("ROLE_PORTFOLIO");
+            }
             newPicture.setPicture(fileToken);
             User user = userService.getCurrentUser();
-            user.setStatusAvatar("notNull");
             userService.updateUser(user);
             pictureService.updateProfilePicture(picture);
 

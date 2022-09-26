@@ -15,4 +15,5 @@ public interface LikesService {
     void deletePicture(Long id);
     void saveLike(Likes like);
     void deleteLike(Likes like);
+    List<Likes> findAllByUser(User user);
 }

@@ -36,7 +36,7 @@ public class SecurityConfig {
 
         http.formLogin()
                 .loginProcessingUrl("/auth").permitAll()
-                .defaultSuccessUrl("/profile")
+                .defaultSuccessUrl("/news")
                 .failureUrl("/signin?error1")
                 .usernameParameter("user_email")
                 .passwordParameter("user_password")

@@ -23,16 +23,19 @@ public class PictureController {
     private PictureService pictureService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserMapper userMapper;
 
+    @GetMapping(value = "/user")
+    public UserDto getUser(){
+        return userMapper.toDto(userService.getCurrentUser());
+    }
     @GetMapping
-    public List<Picture> getPictures(){
+    public List<Picture> allPictures(){
         return pictureService.getPictures();
     }
-    @GetMapping(value = "/avatar")
-    private boolean getAvatar(){
-        if (userService.avatarPicture()!=null){
-            return true;
-        }
-        return false;
+    @GetMapping(value = "/likes")
+    public Courier pictureLikes(){
+        return userService.pictureLikes();
     }
 }

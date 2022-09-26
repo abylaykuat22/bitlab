@@ -99,4 +99,10 @@ public class LikesServiceImpl implements LikesService {
     public void deleteLike(Likes like) {
         likesRepository.delete(like);
     }
+
+    @Override
+    public List<Likes> findAllByUser(User user) {
+        return likesRepository.findAllByUser(user);
+    }
+
 }

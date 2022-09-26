@@ -5,28 +5,62 @@
       layout:decorate="layout/main.html">
 <head th:insert="~{head.html}"></head>
 <div layout:fragment="pageContent">
-    <div class="bg-white p-3" style="border-radius: 5px">
-        <div th:each="n:${news}" th:if="${n.user.id==#authentication.getPrincipal().id}" class="mb-3">
+    <div th:each="n:${news}"  class="bg-white p-3 mb-3" style="border-radius: 5px">
+        <div>
             <div>
-                <div>
-                    <div th:each="p:${pictures}" th:if="${p.user.id == #authentication.getPrincipal().id and p.rolePicture=='ROLE_PROFILE'}" class="d-flex">
-                        <div style="padding-right: 11px">
-                            <img th:src="${p.picture}" style="width: 60px;height: 55px;border-radius: 60px;">
-                        </div>
-                        <div>
-                            <p style="margin-bottom: 0px"><strong th:text="${#authentication.getPrincipal().fullName}"></strong></p>
-                            <p th:text="${n.createdAt}" style="font-size: 12px;color: grey;"></p>
-                        </div>
+                <div th:each="p:${pictures}" th:if="${p.rolePicture=='ROLE_PROFILE'}" class="d-flex">
+                    <div th:if="${n.user.statusAvatar == 'null'}" style="padding-right: 11px">
+                        <img th:src="'/getDefaultAvatar'" style="width: 60px;height: 55px;border-radius: 60px;">
+                    </div>
+                    <div th:if="${n.user.statusAvatar != 'null' and p.user.id == n.user.id}" style="padding-right: 11px">
+                        <img th:src="${'/getPictures/'+p.picture}" style="width: 60px;height: 55px;border-radius: 60px;">
+                    </div>
+                    <div th:if="${p.user.id == n.user.id}">
+                        <a th:href="${'/profile/'+n.user.id}">
+                        <p style="margin-bottom: 0px; font-size: 15px; color:#0047c9; "><strong th:text="${n.user.fullName}"></strong></p>
+                        </a>
+                        <p th:text="${n.createdAt}" style="font-size: 15px;color: grey;"></p>
                     </div>
                 </div>
             </div>
-            <p th:text="${n.description}" class="mt-2"></p>
-            <div class="mt-2" th:each="picNews:${n.pictures}">
-                <img th:src="${picNews.picture}" style="width: 100%; border-radius: 5px">
-            </div>
-            <hr>
+        </div>
+        <p th:text="${n.description}" class="mt-2"></p>
+        <div class="mt-2" th:each="p: ${pictures}" th:if="${p.rolePicture=='ROLE_NEWS' and p.news.id == n.id}">
+            <img th:src="${'/getPictures/'+p.picture}" class="mb-2" style="width: 100%; border-radius: 5px">
+        </div>
+        <div th:id="${n.id+'_news_likes'}"></div>
+        <hr>
+            <div th:id="${n.id+'_news_comments'}"></div>
+        <div class='d-flex mt-2'>
+            <img th:if="${user.statusAvatar == 'null'}" src='/getDefaultAvatar' style='width: 44px; height: 44px; border-radius: 40px'>
+            <img th:if="${avatarPicture != null}" th:src="${'/getPictures/'+avatarPicture.picture}" style='width: 44px; height: 44px; border-radius: 40px; margin-right: 5px; margin-left: 2px'>
+            <textarea id="comment_text" name='comment_news_page' class='form-control' placeholder='Leave a comment...' rows='1' style='margin-left: 10px'></textarea>
+            <input type='hidden' id='comment_user_email' th:value="${user.email}">
+            <button th:onclick="'javascript:addCommentNewsPage(' + ${n.id} + ')'" class='btn'><i class='fa fa-chevron-right' aria-hidden='true'></i></button>
         </div>
     </div>
+
+    <!-- Модальное окно -->
+    <div class="modal fade" id="deleteCommentNewsPageModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center">Delete comment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="comment_news_page_id">
+                    <strong>Are you sure?</strong>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
+                    <button th:onclick="'deleteCommentConfirmNewsPage()'" data-bs-dismiss="modal" class="btn btn-danger">YES</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/profile.js"></script>
 </div>
 </html>
 

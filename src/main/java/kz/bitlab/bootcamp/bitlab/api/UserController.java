@@ -27,9 +27,9 @@ public class UserController {
     @Autowired
     private PictureService pictureService;
 
-    @GetMapping(value = "/currentUserData")
-    public Courier currentUserData(){
-        return userService.getCurrentUserData();
+    @GetMapping(value = "/userData/{id}")
+    public Courier userData(@PathVariable(name = "id") Long id){
+        return userService.userData(id);
     }
 
     @PostMapping

@@ -3,17 +3,18 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorate="layout/main.html">
 <div layout:fragment="pageContent">
+    <input type="hidden" th:id="profile_user" th:value="${user.id}">
     <div class="row">
-        <div class="col-4">
+        <div class="col-4" style="padding-right: 0px">
             <div class="bg-white" style="border-radius: 8px; padding: 10px">
                 <div class="thumbnail" th:each="p:${pictures}">
                     <div class="img-wrap" style="width: 100%;"
-                         th:if="${p.rolePicture=='ROLE_PROFILE' and p.user.id == #authentication.getPrincipal().id}">
+                         th:if="${p.rolePicture=='ROLE_PROFILE' and p.user.id == user.id}">
                         <div>
-                            <span th:onclick="'deletePicture('+${p.id}+')'" class="close" style="padding-bottom: 9px;">&times;</span>
+                            <span th:if="${user.id == #authentication.getPrincipal().id}" th:onclick="'deletePicture('+${p.id}+')'" class="close" style="padding-bottom: 9px;">&times;</span>
                             <a th:href="@{'/getPictures/'+ ${p.picture}}" class="d-flex">
                                 <img th:src="@{'/getPictures/'+${p.picture}}" class="img-thumbnail w-100" alt="Lights"
-                                     style="height: 220px;">
+                                     style="height: 280px;">
                             </a>
                         </div>
                     </div>
@@ -21,11 +22,11 @@
                 <div th:if="${avatarPicture==null}">
                     <div>
                         <img th:src="'/getDefaultAvatar'" class="img-thumbnail w-100" alt="Lights"
-                             style="height: 180px;">
+                             style="height: 280px;">
                     </div>
                 </div>
-                <form th:action="@{'/uploadAvatar'}" method="post" enctype="multipart/form-data">
-                    <div style="text-align:center;padding:3%;border:thin solid; border-color: rgb(225,225,225);">
+                <form th:if="${user.id == #authentication.getPrincipal().id}" th:action="@{'/uploadAvatar'}" method="post" enctype="multipart/form-data">
+                    <div style="text-align:center;padding:3%;border:thin solid; background-color: rgb(225,225,225);">
                         <label style="cursor:pointer" for="inputTag">
                             Update Image <br/>
                             <i class="fa fa-x fa-camera"></i>
@@ -40,28 +41,43 @@
                 </form>
             </div>
             <div class="bg-white mt-3" style="border-radius: 8px; padding: 10px">
-                <label><strong style="font-size: 14px;">People you may know</strong></label>
-                <hr>
-                <div class="row" id="unknown_users"></div>
+                <div class="mb-2">
+                    <label>Friends</label>
+                </div>
+                <div class="row">
+                    <div class="col-4" th:each="u:${userFriends}">
+                        <div>
+                            <img th:if="${u.statusAvatar == 'null'}" th:src="${'/getDefaultAvatar'}" style='width: 70px; height: 70px; border-radius: 70px'>
+                            <img th:if="${u.statusAvatar != 'null'}" th:src="${'/getPictures/'+u.statusAvatar}" style='width: 70px; height: 70px; border-radius: 70px'>
+                        </div>
+                        <div class="text-center">
+                            <a th:href="${'/profile/'+u.id}" style="text-decoration: none">
+                                <div style="margin-bottom: 0px; font-size: 12px; color:#0047c9;" th:text="${u.fullName}"></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-8">
             <div class="bg-white" style="border-radius: 8px; padding: 10px">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <h5 style="color: #0047c9;" th:text="${#authentication.getPrincipal().fullName}"></h5>
+                        <h5 style="color: #0047c9;" th:text="${user.fullName}"></h5>
                     </div>
-                    <div>
-                        <p class="text-secondary" th:if="${#authentication.getPrincipal()!=null}">Online</p>
-                    </div>
+<!--                    <div>-->
+<!--                        <p class="text-secondary" th:if="${#authentication.getPrincipal()!=null}">Online</p>-->
+<!--                    </div>-->
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-4">
                         <p class="text-secondary">Birthday:</p>
+                        <p class="text-secondary">Gender:</p>
                     </div>
                     <div class="col-8">
-                        <p style="color: #3e5459" th:text="${#authentication.getPrincipal().birthdate}"></p>
+                        <p style="color: #3e5459" th:text="${user.birthdate}"></p>
+                        <p style="color: #3e5459" th:text="${user.gender}"></p>
                     </div>
                 </div>
                 <hr>
@@ -70,29 +86,45 @@
                 </div>
             </div>
             <div class="bg-white mt-3" style="border-radius: 8px; padding: 10px">
-                <div class="d-flex justify-content-between">
+                <div th:if="${user.id == #authentication.getPrincipal().id}" class="d-flex justify-content-between">
                     <div>
                         <label class="mb-3">My photos</label>
                     </div>
-                    <div id="addPhotoButtonHidden" >
-                        <form th:action="@{'/newPortfolioPhoto'}" method="post" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <input type="hidden" name="rolePicture" th:value="'ROLE_PORTFOLIO'">
-                                <input type="hidden" name="id" th:value="${#authentication.getPrincipal().id}">
-                                <input class="form-control form-control-sm" type="file" name="photo"
-                                       style="font-size: 10px">
-                                <button class="btn form-control"
-                                        style="background-color: rgb(225,225,225); font-size: 12px; padding: 0px; height: 22px;">+Add Photo
-                                </button>
+                    <form th:action="@{'/newPortfolioPhoto'}" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <input type="hidden" name="rolePicture" th:value="'ROLE_PORTFOLIO'">
+                            <input type="hidden" name="id" th:value="${#authentication.getPrincipal().id}">
+                            <input class="form-control form-control-sm" type="file" name="photo"
+                                   style="font-size: 10px">
+                            <button class="btn form-control"
+                                    style="background-color: rgb(225,225,225); font-size: 12px; padding: 0px; height: 22px;">+Add Photo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div th:if="${user.id != #authentication.getPrincipal().id}">
+                    <label class="mb-3" th:text="${user.fullName +' photos'}"></label>
+                </div>
+                <div class="row" style="padding-left: 10px; padding-right: 10px">
+                    <div class='col-4 mb-2' th:each="p:${array.pictureList}" th:if="${p.rolePicture == 'ROLE_PROFILE' or p.rolePicture == 'ROLE_PORTFOLIO'}">
+                        <div class='thumbnail'>
+                            <div class='img-wrap' style='width: 100%;'>
+                                <input type='hidden' id='rolePortfolio' value='ROLE_PORTFOLIO'>
+                                <input type="hidden" id="current_user_id" th:value="${#authentication.getPrincipal().id}">
+                                <span th:if="${array.user.id == #authentication.getPrincipal().id}" th:onclick="'javascript:deletePicture(' + ${p.id} + ')'" class='close'
+                                      style='padding-bottom: 9px;'>&times;</span>
+                                <a th:href="${'/getPictures/'+p.picture}">
+                                    <img th:src="${'/getPictures/'+p.picture}" style='width:100%; height: 180px; border-radius: 5px'>
+                                </a>
                             </div>
-                        </form>
+                        </div>
+                        <div th:id="${p.id+'_picture'}"></div>
                     </div>
                 </div>
-                <div id="user_data" class="row" style="padding-left: 10px; padding-right: 10px"></div>
                 <div id="likedUsersInfo" style="display: none"></div>
             </div>
             <div id="count" class="row" style="padding-left: 10px; padding-right: 10px"></div>
-            <div class="bg-white mt-3" style="border-radius: 8px; padding: 10px">
+            <div class="bg-white mt-3" style="border-radius: 8px; padding: 10px" th:if="${user.id == #authentication.getPrincipal().id}">
                 <div class="row">
                     <form th:action="@{'/addNews'}" method="post" enctype="multipart/form-data">
                         <div class="d-flex">
@@ -115,7 +147,41 @@
                     </form>
                 </div>
             </div>
-            <div id="news_data"></div>
+            <div class='bg-white mt-3' style='border-radius: 8px; padding: 10px' th:each="n : ${news}">
+                <div class='mb-2'>
+                    <div class='d-flex justify-content-between'>
+                        <div class='d-flex'>
+                            <div style='padding-right: 11px'>
+                                    <img th:if="${user.statusAvatar == 'null'}" src='/getDefaultAvatar' style='width: 44px; height: 40px; border-radius: 40px'>
+                                    <img th:if="${avatarPicture!=null}" th:src="${'/getPictures/'+avatarPicture.picture}" style='width: 44px; height: 44px; border-radius: 40px; margin-right: 3px; margin-left: 2px'>
+                            </div>
+                            <div>
+                                <p style='margin-bottom: 0px; font-size: 0.8rem;' class='text-primary'>
+                                    <strong style='color: #0047c9' th:text="${n.user.fullName}"></strong>
+                                    </p>
+                                <p style='font-size: 12px;color: grey;' th:text="${n.createdAt}"></p>
+                            </div>
+                        </div>
+                            <div th:if="${user.id == #authentication.getPrincipal().id}">
+                                <button th:onclick="'javascript:deleteNews(' + ${n.id} + ')'" class='btn'><i style='color: #7d99c0' class='fa fa-trash'></i></button>
+                            </div>
+                    </div>
+                </div>
+                <p class='mt-2' th:text="${n.description}"></p>
+                <div th:id="${n.id+'_news'}"></div>
+                <div th:id="${n.id+'_newsLikes'}"></div>
+                <div th:id="${n.id+'_comment'}"></div>
+                 <div class='d-flex mt-2'>
+                     <img th:if="${user.statusAvatar == 'null'}" src='/getDefaultAvatar' style='width: 44px; height: 44px; border-radius: 40px'>
+                     <img th:if="${avatarPicture != null}" th:src="${'/getPictures/'+avatarPicture.picture}" style='width: 44px; height: 44px; border-radius: 40px; margin-right: 5px; margin-left: 2px'>
+                     <textarea id="comment_text_profile" name='comment_news' class='form-control' placeholder='Leave a comment...' rows='1' style='margin-left: 10px'></textarea>
+                     <input type='hidden' id='comment_user_email' th:value="${user.email}">
+                     <button th:onclick="'javascript:addComment(' + ${n.id} + ')'" class='btn'><i class='fa fa-chevron-right' aria-hidden='true'></i></button>
+                     </div>
+             </div>
+            </div>
+
+<!--            <div id="news_data"></div>-->
 
         <!-- Модальное окно -->
         <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -153,7 +219,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
-                            <button th:onclick="'deleteNewsConfirm()'" data-bs-dismiss="modal" class="btn btn-danger">YES</button>
+                            <button th:onclick="'javascript:deleteNewsConfirm()'" data-bs-dismiss="modal" class="btn btn-danger">YES</button>
                         </div>
                     </div>
                 </div>
@@ -179,7 +245,7 @@
                     </div>
                 </div>
             </div>
-        <script type="text/javascript" th:src="'profile.js'"></script>
+            <script src="/profile.js"></script>
         <style>
             .img-wrap {
                 position: relative;

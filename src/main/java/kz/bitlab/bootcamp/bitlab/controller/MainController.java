@@ -1,13 +1,7 @@
 package kz.bitlab.bootcamp.bitlab.controller;
-
 import kz.bitlab.bootcamp.bitlab.Courier.Courier;
-import kz.bitlab.bootcamp.bitlab.model.Likes;
-import kz.bitlab.bootcamp.bitlab.model.News;
 import kz.bitlab.bootcamp.bitlab.services.*;
-import liquibase.pro.packaged.E;
-import liquibase.pro.packaged.M;
 import org.apache.commons.io.IOUtils;
-import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -20,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 @Controller
 public class MainController {
@@ -34,6 +27,8 @@ public class MainController {
     private FileUploadService fileUploadService;
     @Autowired
     private LikesService likesService;
+    @Autowired
+    private FriendsService friendsService;
     @Value("${loadUrl}")
     private String loadUrl;
 
@@ -57,11 +52,14 @@ public class MainController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(value = "/profile")
-    public String profilePage(Model model) {
-        model.addAttribute("avatarPicture", userService.avatarPicture());
+    @GetMapping(value = "/profile/{id}")
+    public String profilePage(@PathVariable (name = "id") Long id, Model model) {
+        model.addAttribute("avatarPicture", userService.avatarPicture(id));
         model.addAttribute("pictures", pictureService.getPictures());
-        model.addAttribute("likes", likesService.allLikes());
+        model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("array", userService.userData(id));
+        model.addAttribute("news", newsService.userNews(id));
+        model.addAttribute("userFriends", friendsService.getUserFriends(id));
         return "profile";
     }
 
@@ -69,6 +67,17 @@ public class MainController {
     @GetMapping(value = "/editProfile")
     public String editProfilePage() {
         return "editProfile";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value = "/news")
+    public String newsPage(Model model){
+        model.addAttribute("news", newsService.getNews());
+        model.addAttribute("pictures", pictureService.getPictures());
+        model.addAttribute("user", userService.getCurrentUser());
+        model.addAttribute("avatarPicture", userService.avatarPicture(userService.getCurrentUser().getId()));
+        model.addAttribute("users", userService.getAllUsers());
+        return "news";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -119,7 +128,7 @@ public class MainController {
         if (file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/png")) {
             fileUploadService.uploadProfilePicture(file, courier);
         }
-        return "redirect:/profile";
+        return "redirect:/profile/"+courier.getId();
     };
 
     @PreAuthorize("isAuthenticated()")
@@ -130,7 +139,7 @@ public class MainController {
         if (file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/png")) {
             fileUploadService.uploadProfilePicture(file, courier);
         }
-        return "redirect:/profile";
+        return "redirect:/profile/"+id;
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -141,6 +150,6 @@ public class MainController {
             newsService.addNews(file, courier);
         }
 
-        return "redirect:/profile";
+        return "redirect:/profile/"+userService.getCurrentUser().getId();
     }
 }

@@ -2,7 +2,13 @@ package kz.bitlab.bootcamp.bitlab.services.impl;
 
 import kz.bitlab.bootcamp.bitlab.Courier.Courier;
 import kz.bitlab.bootcamp.bitlab.dto.CommentDto;
+import kz.bitlab.bootcamp.bitlab.dto.NewsDto;
+import kz.bitlab.bootcamp.bitlab.dto.PictureDto;
+import kz.bitlab.bootcamp.bitlab.dto.UserDto;
 import kz.bitlab.bootcamp.bitlab.mapper.CommentMapper;
+import kz.bitlab.bootcamp.bitlab.mapper.NewsMapper;
+import kz.bitlab.bootcamp.bitlab.mapper.PictureMapper;
+import kz.bitlab.bootcamp.bitlab.mapper.UserMapper;
 import kz.bitlab.bootcamp.bitlab.model.*;
 import kz.bitlab.bootcamp.bitlab.repositories.NewsRepository;
 import kz.bitlab.bootcamp.bitlab.services.*;
@@ -34,6 +40,12 @@ public class NewsServiceImpl implements NewsService {
     private CommentService commentService;
     @Autowired
     private CommentMapper commentMapper;
+    @Autowired
+    private NewsMapper newsMapper;
+    @Autowired
+    private PictureMapper pictureMapper;
+    @Autowired
+    private UserMapper userMapper;
     @Value("${targetUrl}")
     private String targetUrl;
 
@@ -67,6 +79,8 @@ public class NewsServiceImpl implements NewsService {
                 newPicture.setNews(news);
                 pictureService.updateProfilePicture(picture);
                 courierWithNews.setPictureObj(newPicture);
+                news.setPictureId(newPicture.getId());
+                newsRepository.save(news);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -167,12 +181,17 @@ public class NewsServiceImpl implements NewsService {
             }
         }
         News news = newsRepository.findById(newsId).orElseThrow();
+        int amount = news.getAmountLikes();
         for (Likes l : newsLikes){
             if (l.getNews().getId().equals(news.getId()) && l.getUser().getId().equals(userService.getCurrentUser().getId())){
+                amount = amount - 1;
+                news.setAmountLikes(amount);
                 likesService.deleteLike(l);
                 return "delete";
             }
         }
+        amount = amount + 1;
+        news.setAmountLikes(amount);
         Likes like = new Likes();
         like.setUser(userService.getCurrentUser());
         like.setNews(news);
@@ -189,5 +208,86 @@ public class NewsServiceImpl implements NewsService {
             comment.setComment(courier.getCommentNews());
             commentService.saveComment(comment);
         }
+    }
+
+    @Override
+    public List<NewsDto> userNews(Long id) {
+        List<News> allNews = newsRepository.findAll();
+        List<News> newsList = new ArrayList<>();
+        for (News n : allNews){
+            if (n.getUser().getId().equals(id)){
+                newsList.add(n);
+            }
+        }
+        return newsMapper.toDtoList(newsList);
+    }
+
+    @Override
+    public Courier newsComments() {
+        Courier courier = new Courier();
+        List<News> newsList = getNews();
+        courier.setNewsDtoList(newsMapper.toDtoList(newsList));
+        List<CommentDto> comments = commentService.getAllComments();
+        courier.setNewsDtoList(newsMapper.toDtoList(newsList));
+        courier.setCommentDtoList(comments);
+        List<UserDto> userDtoList = userService.getAllUsers();
+        courier.setUsers(userDtoList);
+        List<Picture> pictures = pictureService.getPictures();
+        List<Picture> pictureDtoList = new ArrayList<>();
+        for (Picture p : pictures){
+            if (p.getRolePicture().equals("ROLE_PROFILE")){
+                pictureDtoList.add(p);
+            }
+        }
+        courier.setGetUsersAvatars(pictureMapper.toDtoList(pictureDtoList));
+        courier.setUserDto(userMapper.toDto(userService.getCurrentUser()));
+        return courier;
+    }
+
+    @Override
+    public List<CommentDto> comments(Long id) {
+        List<News> userNews = newsMapper.toEntityList(userNews(id));
+        List<Comment> comments = commentMapper.toEntityList(commentService.getAllComments());
+        List<Comment> commentList = new ArrayList<>();
+        for (News n : userNews){
+            for (Comment c : comments){
+                if (n.getId().equals(c.getNews().getId())){
+                    commentList.add(c);
+                }
+            }
+        }
+        return commentMapper.toDtoList(commentList);
+    }
+
+    @Override
+    public List<UserDto> commentUserList(Long id) {
+        List<Comment> comments = commentMapper.toEntityList(comments(id));
+        List<User> users = userMapper.toEntityList(userService.getAllUsers());
+        List<User> userList = new ArrayList<>();
+        for (Comment c : comments){
+            for (User u : users){
+                if (c.getUser().getId().equals(u.getId())){
+                    userList.add(u);
+                }
+            }
+        }
+        return userMapper.toDtoList(userList);
+    }
+
+    @Override
+    public Courier newsPictures() {
+        Courier courier = new Courier();
+        List<News> newsList = getNews();
+        courier.setNewsDtoList(newsMapper.toDtoList(newsList));
+        List<Picture> pictures = pictureService.getPictures();
+        List<Picture> pictureList = new ArrayList<>();
+        for (Picture p : pictures){
+            if (p.getRolePicture().equals("ROLE_NEWS")){
+                pictureList.add(p);
+            }
+        }
+        courier.setPictureDtoList(pictureMapper.toDtoList(pictureList));
+
+        return courier;
     }
 }

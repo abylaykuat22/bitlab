@@ -1,15 +1,14 @@
 package kz.bitlab.bootcamp.bitlab.Courier;
 
 import kz.bitlab.bootcamp.bitlab.dto.CommentDto;
+import kz.bitlab.bootcamp.bitlab.dto.NewsDto;
 import kz.bitlab.bootcamp.bitlab.dto.PictureDto;
 import kz.bitlab.bootcamp.bitlab.dto.UserDto;
-import kz.bitlab.bootcamp.bitlab.model.Likes;
 import kz.bitlab.bootcamp.bitlab.model.News;
 import kz.bitlab.bootcamp.bitlab.model.Picture;
 import kz.bitlab.bootcamp.bitlab.model.User;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -41,6 +40,7 @@ public class Courier {
     private List<Integer> amountLikesOnNews;
     private List<UserDto> users;
     private User currentUser;
+    private User user;
     private Picture currentUserAvatar;
     private List<Picture> newsPictures;
     private List<CommentDto> commentsByNews;
@@ -53,4 +53,10 @@ public class Courier {
     private List<Long> userSenderIdList;
     private Long userSenderId;
     private Long userRecipientId;
+    private List<Long> usersId;
+    private boolean check;
+    private List<PictureDto> pictureDtoList;
+    private List<NewsDto> newsDtoList;
+    private List<CommentDto> commentDtoList;
+    private UserDto userDto;
 }

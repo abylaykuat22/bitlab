@@ -12,6 +12,8 @@ import java.util.List;
 @Setter
 public class News extends BaseEntity{
     private String description;
+    private Long pictureId;
+    private int amountLikes;
     @ManyToOne
     private User user;
 }

@@ -65,14 +65,15 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Courier getCurrentUserData() {
+    public Courier userData(Long id) {
         List<Picture> pictures = pictureService.getPictures();
         List<Picture> pictureList = new ArrayList<>();
         for (Picture p : pictures){
-            if (p.getUser().getId().equals(getCurrentUser().getId())) {
+            if (p.getUser().getId().equals(id)) {
                 pictureList.add(p);
             }
         }
+
         List<Integer> likesList = likesService.amountLikesOnPicture(pictureList);
         List<Likes> likes = likesService.allLikes();
         List<Likes> pictureLikes = new ArrayList<>();
@@ -95,7 +96,7 @@ public class UserServiceImpl implements UserService {
         courier.setPictureList(pictureList);
         courier.setAmountLikesOnPicture(likesList);
         courier.setUsers(userMapper.toDtoList(userList));
-        courier.setCurrentUser(getCurrentUser());
+        courier.setUser(userRepository.findById(id).orElseThrow());
         return courier;
     }
 
@@ -227,10 +228,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Picture avatarPicture() {
+    public Picture avatarPicture(Long id) {
         List<Picture> pictures = pictureService.getPictures();
         for (Picture p: pictures){
-            if (p.getUser().getId().equals(getCurrentUser().getId()) && p.getRolePicture().equals("ROLE_PROFILE")){
+            if (p.getUser().getId().equals(id) && p.getRolePicture().equals("ROLE_PROFILE")){
                 return p;
             }
         }
@@ -246,17 +247,40 @@ public class UserServiceImpl implements UserService {
                 pictureLikes.add(l);
             }
         }
+
         Picture picture = pictureService.getPictureById(pictureId);
+        int amount = picture.getAmountLikes();
         for (Likes l : pictureLikes){
             if (l.getPicture().getId().equals(picture.getId()) && l.getUser().getId().equals(getCurrentUser().getId())){
+                amount = amount -1;
+                picture.setAmountLikes(amount);
                 likesService.deleteLike(l);
                 return "delete";
             }
         }
+        amount = amount +1;
+        picture.setAmountLikes(amount);
         Likes like = new Likes();
         like.setPicture(picture);
         like.setUser(getCurrentUser());
         likesService.saveLike(like);
         return "add";
     }
+
+    @Override
+    public Courier pictureLikes() {
+        Courier courier = new Courier();
+        courier.setPictures(pictureService.getPictures());
+        List<Likes> likes = likesService.findAllByUser(getCurrentUser());
+        List<Picture> pictures = pictureService.getPictures();
+//        for (Likes l : likes){
+//            if (pictures.contains(l.getPicture())){
+//                courier.setCheck(true);
+//            }else{
+//                courier.setCheck(false);
+//            }
+//        }
+        return courier;
+    }
+
 }

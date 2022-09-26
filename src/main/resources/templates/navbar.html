@@ -8,11 +8,10 @@
                 <img src="/pictures/logo.png" th:href="@{'/'}" style="width: 72%">
             </div>
             <div class="col-10 d-flex justify-content-between" >
-                <form class="d-flex col-4" role="search" style="padding-right: 5px">
-                    <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
+                <form class="d-flex col-4" role="search" style="padding-right: 0px">
+                    <input class="form-control me-2" style="margin-right: 0px" type="search" placeholder="Поиск" aria-label="Поиск">
                 </form>
                 <div class="dropdown d-flex col-8 justify-content-end">
-                    <div id="check"></div>
                     <a class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="userPicture">
                     </a>
                     <ul class="dropdown-menu">
@@ -29,39 +28,24 @@
     <script>
         function loadData(){
             loadPictures();
-            check();
         }
 
         function loadPictures() {
             const xhttp = new XMLHttpRequest();
             xhttp.onload = function () {
-                var avatarPicture = JSON.parse(this.responseText);
-                for (let i = 0; i < avatarPicture.length; i++) {
-                    if ([[${#authentication.getPrincipal().getId()}]] == avatarPicture[i].user.id && avatarPicture[i].rolePicture == 'ROLE_PROFILE'){
-                        var avaHTML = ""
-                        avaHTML+="<img src=\"/getPictures/"+avatarPicture[i].picture+"\" style='width: 44px; height: 40px; border-radius: 40px'>"
-                        document.getElementById("userPicture").innerHTML = avaHTML;
+                var avaHTML = ""
+                var user = JSON.parse(this.responseText);
+                    if (user.statusAvatar =='null'){
+                        avaHTML+="<img src='/getDefaultAvatar' style='width: 44px; height: 40px; border-radius: 40px'>"
+                    }else {
+                        avaHTML+="<img src='/getPictures/" + user.statusAvatar + "' style='width: 44px; height: 44px; border-radius: 40px;'>";
                     }
-                }
+                document.getElementById("userPicture").innerHTML = avaHTML;
             }
-            xhttp.open("GET", "http://localhost:8000/picture")
+            xhttp.open("GET", "http://localhost:8000/picture/user")
             xhttp.send();
         }
 
-
-        function check(){
-            const xhttp = new XMLHttpRequest();
-            xhttp.onload = function () {
-                var avatarPicture = JSON.parse(this.responseText);
-                if (avatarPicture===false){
-                    var avaHTML = ""
-                    avaHTML+="<img src='/getDefaultAvatar' style='width: 44px; height: 40px; border-radius: 40px'>"
-                    document.getElementById("check").innerHTML = avaHTML;
-                }
-            }
-            xhttp.open("GET", "http://localhost:8000/picture/avatar")
-            xhttp.send();
-        }
     </script>
 </div>
 </html>

@@ -8,7 +8,7 @@ VALUES ('admin@gmail.com', '$2a$10$Ake45d/Odwme7tAPQhdZL.m53WOu6yNB0kIXIML/hWXZD
         'MALE', 'null', 'null'),
        ('user3@gmail.com', '$2a$10$Ake45d/Odwme7tAPQhdZL.m53WOu6yNB0kIXIML/hWXZDS0HX0I.2', 'qweqwe', 'King Viserys i Targaryen', '2022-09-01',
         'MALE', 'null', 'null'),
-       ('user5@gmail.com', '$2a$10$Ake45d/Odwme7tAPQhdZL.m53WOu6yNB0kIXIML/hWXZDS0HX0I.2', 'qweqwe', 'Olivia Cooke', '2022-09-01',
+       ('user5@gmail.com', '$2a$10$Ake45d/Odwme7tAPQhdZL.m53WOu6yNB0kIXIML/hWXZDS0HX0I.2', 'qweqwe', 'Alicent Hightower', '2022-09-01',
         'FEMALE', 'null', 'null'),
        ('user6@gmail.com', '$2a$10$Ake45d/Odwme7tAPQhdZL.m53WOu6yNB0kIXIML/hWXZDS0HX0I.2', 'qweqwe', 'Ser Harrold Westerling', '2022-09-01',
         'MALE', 'null', 'null'),

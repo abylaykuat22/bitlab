@@ -1,6 +1,7 @@
 package kz.bitlab.bootcamp.bitlab.services;
 
 import kz.bitlab.bootcamp.bitlab.Courier.Courier;
+import kz.bitlab.bootcamp.bitlab.dto.PictureDto;
 import kz.bitlab.bootcamp.bitlab.model.Picture;
 import kz.bitlab.bootcamp.bitlab.model.User;
 
@@ -13,4 +14,6 @@ public interface PictureService {
     void deletePic(Long id);
     Picture getPictureById(Long id);
     void deletePicture(Long id);
+
+
 }

@@ -1,8 +1,11 @@
 package kz.bitlab.bootcamp.bitlab.services.impl;
 
 import kz.bitlab.bootcamp.bitlab.Courier.Courier;
+import kz.bitlab.bootcamp.bitlab.dto.PictureDto;
 import kz.bitlab.bootcamp.bitlab.dto.UserDto;
+import kz.bitlab.bootcamp.bitlab.mapper.PictureMapper;
 import kz.bitlab.bootcamp.bitlab.model.Likes;
+import kz.bitlab.bootcamp.bitlab.model.News;
 import kz.bitlab.bootcamp.bitlab.model.Picture;
 import kz.bitlab.bootcamp.bitlab.model.User;
 import kz.bitlab.bootcamp.bitlab.repositories.PictureRepository;
@@ -22,6 +25,8 @@ import java.util.List;
 public class PictureServiceImpl implements PictureService {
     @Autowired
     private PictureRepository pictureRepository;
+    @Autowired
+    private PictureMapper pictureMapper;
 
     @Override
     public List<Picture> getPictures() {
@@ -32,6 +37,8 @@ public class PictureServiceImpl implements PictureService {
     public void deletePic(Long id) {
         pictureRepository.deleteById(id);
     }
+
+
 
     @Override
     public Picture getPictureById(Long id) {

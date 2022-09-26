@@ -20,11 +20,7 @@ public class FriendsController {
 
     @GetMapping
     public Courier getAllUsers(){
-        Courier courier = new Courier();
-        courier.setGetAllUsers(userService.getAllUsers());
-        courier.setGetUsersAvatars(userService.getUsersAvatars());
-        courier.setCurrentUser(userService.getCurrentUser());
-        return courier;
+        return friendsService.getUnknownUsers();
     }
 
     @PostMapping
@@ -45,6 +41,14 @@ public class FriendsController {
     @PostMapping(value = "/confirmAdd")
     public void confirmAddFriends(@RequestBody Courier courier){
         friendsService.confirmAddFriend(courier);
+    }
+    @DeleteMapping
+    public void cancelRequest(@RequestBody Courier courier){
+        friendsService.cancelRequest(courier);
+    }
+    @DeleteMapping(value = "/confirm_delete")
+    public void deleteFriend(@RequestBody Courier courier){
+        friendsService.cancelRequest(courier);
     }
 }
 

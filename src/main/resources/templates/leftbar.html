@@ -5,7 +5,8 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
         <div class="row" sec:authorize="isAuthenticated()" style="padding: 10px 0px 10px 10px; border-radius: 8px;" >
-            <a th:href="@{'/profile'}" class="mt-2 list-group-item" style="font-size: 18px">
+<!--            onclick="userData([[${#authentication.getPrincipal().getId()}]])"-->
+            <a th:href="@{'/profile/'+${#authentication.getPrincipal().id}}" class="mt-2 list-group-item" style="font-size: 18px">
                 <i class="fas fa-user-circle" style="width: 30px; font-size: 18px"></i> My profile
             </a>
             <a th:href="@{'/news'}" class="list-group-item mt-2" style="font-size: 18px">

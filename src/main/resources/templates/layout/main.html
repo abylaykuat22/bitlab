@@ -6,7 +6,7 @@
     <link th:insert="~{head.html}">
     <meta charset="UTF-8">
 </head>
-<body style="background-color: rgb(225,225,225); min-height: 1000px; font-family: system-ui" onload="loadData(); loadProfileData();" >
+<body style="background-color: rgb(205,205,205); min-height: 1000px; font-family: system-ui" onload="allNewsLikes(); allNewsComments(); allUserComments(); loadData();friendsData(); getUnknownUsers();  friendRequests(); loadProfileData(); " >
 <div class="container-fluid">
     <div class="row" th:insert="~{navbar.html}" sec:authorize="isAuthenticated()"></div>
     <div class="row" th:insert="~{signin.html}" sec:authorize="isAnonymous()"></div>

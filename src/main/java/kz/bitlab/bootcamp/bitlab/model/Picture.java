@@ -13,6 +13,7 @@ import java.util.List;
 public class Picture extends BaseEntity{
     private String picture;
     private String rolePicture;
+    private int amountLikes;
     @ManyToOne
     private User user;
     @ManyToOne

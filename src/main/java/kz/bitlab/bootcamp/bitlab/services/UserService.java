@@ -23,9 +23,10 @@ public interface UserService extends UserDetailsService {
     User changePassword(Courier courier);
     UserDto checkCodeWord(Courier courier);
     UserDto resetAddNewPassword(Courier courier);
-    Picture avatarPicture();
+    Picture avatarPicture(Long id);
     void deleteUserAvatar();
-    Courier getCurrentUserData();
+    Courier userData(Long id);
     String addDeleteLike(Long pictureId);
     void updateUser(User user);
+    Courier pictureLikes();
 }
