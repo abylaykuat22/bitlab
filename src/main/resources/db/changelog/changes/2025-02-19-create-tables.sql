@@ -1,0 +1,20 @@
+-- liquibase formatted sql
+
+-- changeset alisher:1
+CREATE TABLE IF NOT EXISTS COUNTRIES
+(
+    ID   BIGSERIAL PRIMARY KEY,
+    NAME VARCHAR NOT NULL,
+    CODE VARCHAR NOT NULL UNIQUE
+);
+
+-- changeset alisher:2
+CREATE TABLE IF NOT EXISTS ITEMS
+(
+    ID              BIGSERIAL PRIMARY KEY,
+    NAME            VARCHAR NOT NULL,
+    PRICE           INT,
+    QUANTITY        INT,
+    MANUFACTURER_ID BIGINT,
+    FOREIGN KEY (MANUFACTURER_ID) REFERENCES COUNTRIES (ID)
+);
