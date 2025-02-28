@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: trello
+  datasource:
+    url:
+    username:
+    password:
