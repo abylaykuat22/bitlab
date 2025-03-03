@@ -2,6 +2,7 @@ spring:
   application:
     name: trello
   datasource:
-    url: jdbc
+    # CONNECT DB
+    url:
     username:
     password:
