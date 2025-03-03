@@ -23,9 +23,9 @@ public class Comments {
 //    @JoinColumn(name = "TASK_ID", nullable = false)
 //    private Task task;
 //
-//    @ManyToOne
-//    @JoinColumn(name = "USER_ID", nullable = false)
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private User user;
 
     @Column(name = "COMMENT_TEXT", nullable = false)
     private String commentText;
