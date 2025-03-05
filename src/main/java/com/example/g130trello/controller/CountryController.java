@@ -20,18 +20,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@ResponseBody
 @RequiredArgsConstructor
 @RequestMapping("/country")
 @Tag(name = "CountryController",description = "Api для управления Странами")
 public class CountryController {
-private final CountryService countryService;
 
+private final CountryService countryService;
 
     @GetMapping
     @Operation(summary = "Получение список стран",description = "Возвращает список стран.")
     @ApiResponses(value={
-            @ApiResponse(responseCode ="400",description ="Страны не найдены" ),
+            @ApiResponse(responseCode ="500",description ="Ошибка сервера" ),
             @ApiResponse(responseCode = "200",description = "Страны получены успешно",content={
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = CountryResponseDto.class))
             })
@@ -41,7 +40,7 @@ private final CountryService countryService;
             ResponseEntity<List<CountryResponseDto>> tResponseEntity = new ResponseEntity<>(countryService.getCountries(), HttpStatus.OK);
             return tResponseEntity;
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -50,7 +49,7 @@ private final CountryService countryService;
     @GetMapping("/{id}")
     @Operation(summary = "Получение страну по ID",description = "Возвращает страну по ID.")
     @ApiResponses(value={
-            @ApiResponse(responseCode ="400",description ="Страна не найдена" ),
+            @ApiResponse(responseCode ="404",description ="Страна не найдена" ),
             @ApiResponse(responseCode = "200",description = "Страна получена успешно",content={
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = CountryResponseDto.class))
             })
@@ -60,7 +59,7 @@ private final CountryService countryService;
             ResponseEntity<CountryResponseDto> tResponseEntity = new ResponseEntity<>(countryService.getCountryById(id), HttpStatus.OK);
             return tResponseEntity;
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -91,7 +90,7 @@ private final CountryService countryService;
     @PutMapping
     @Operation(summary = "Изменение страну",description = "Изменяет страну.")
     @ApiResponses(value={
-            @ApiResponse(responseCode ="400",description ="Страна не найдена чтобы его изменит" ),
+            @ApiResponse(responseCode ="404",description ="Страна не найдена чтобы ее изменит" ),
             @ApiResponse(responseCode = "200",description = "Страна изменена успешно",content={
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = CountryResponseDto.class))
             })
@@ -101,7 +100,7 @@ private final CountryService countryService;
             ResponseEntity<CountryResponseDto> responseDtoResponseEntity= new ResponseEntity<>( countryService.updateCountry(countryResponseDto),HttpStatus.OK);
             return responseDtoResponseEntity;
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -111,9 +110,9 @@ private final CountryService countryService;
 
 
     @DeleteMapping
-    @Operation(summary = "Удаление страну",description = "Удаляет страну.")
+    @Operation(summary = "Удаление страны",description = "Удаляет страны.")
     @ApiResponses(value={
-            @ApiResponse(responseCode ="400",description ="Страна не найдена" ),
+            @ApiResponse(responseCode ="404",description ="Страна не найдена" ),
             @ApiResponse(responseCode = "200",description = "Страна удалена успешно",content={
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = CountryResponseDto.class))
             })
@@ -123,7 +122,7 @@ private final CountryService countryService;
             countryService.deleteCountry(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -6,7 +6,7 @@ import com.example.g130trello.entity.Country;
 import com.example.g130trello.exception.EntityNotFoundException;
 import com.example.g130trello.exception.EntityUniqueException;
 import com.example.g130trello.mapper.CountryMapper;
-import com.example.g130trello.repasitory.CountryRepasitory;
+import com.example.g130trello.repasitory.CountryRepository;
 import com.example.g130trello.service.CountryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,43 +17,54 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CountryServiceImpl implements CountryService {
 
-    private final CountryRepasitory countryRepasitory;
+    private final CountryRepository countryRepository;
 
     @Override
     public List<CountryResponseDto> getCountries() {
-        return countryRepasitory.findAll().stream().map(country -> CountryMapper.INSTANCE.toDto(country)).toList();
+        return countryRepository.findAll()
+                .stream()
+                .map(country -> CountryMapper.INSTANCE.toDto(country))
+                .toList();
     }
 
     @Override
     public CountryResponseDto getCountryById(Long id) {
-        return countryRepasitory.findById(id).map(country -> CountryMapper.INSTANCE.toDto(country)).orElseThrow(() -> new EntityNotFoundException("Country not found"));
+        return countryRepository.findById(id)
+                .map(country -> CountryMapper.INSTANCE.toDto(country))
+                .orElseThrow(() -> new EntityNotFoundException("Country not found"));
     }
 
     @Override
     public void createCountry(CountryRequestDto countryRequestDto) {
         Country country = CountryMapper.INSTANCE.toEntity(countryRequestDto);
-        countryRepasitory.save(country);
+        countryRepository.save(country);
     }
 
     @Override
     public CountryResponseDto updateCode(Long id, String code) {
-        Country country = countryRepasitory.findById(id).orElseThrow(() -> new EntityNotFoundException("Country not found"));
-        countryRepasitory.findByCode((country.getCode())).orElseThrow(() -> new EntityUniqueException("Уже такой есть"));
-        countryRepasitory.save(country);
+        Country country = countryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Country not found"));
+        boolean excists = countryRepository.findByCode((code))
+                .isPresent();
+        if (excists)
+            throw new EntityUniqueException("Уже есть такой код");
+        countryRepository.save(country);
         return CountryMapper.INSTANCE.toDto(country);
     }
 
     @Override
     public CountryResponseDto updateCountry(CountryResponseDto countryResponseDto) {
-        countryRepasitory.findById(countryResponseDto.getId()).orElseThrow(() -> new EntityNotFoundException("Country not found"));
-        countryRepasitory.save(CountryMapper.INSTANCE.toEntityResponse(countryResponseDto));
+        countryRepository.findById(countryResponseDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Country not found"));
+        countryRepository.save(CountryMapper.INSTANCE.toEntityResponse(countryResponseDto));
         return countryResponseDto;
     }
 
     @Override
     public void deleteCountry(Long id) {
-        Country country = countryRepasitory.findById(id).orElseThrow(() -> new EntityNotFoundException("Country not found"));
-        countryRepasitory.delete(country);
+        Country country = countryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Country not found"));
+        countryRepository.delete(country);
     }
 
 
