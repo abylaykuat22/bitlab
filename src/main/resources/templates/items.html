@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Товары</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .badge-new { color:#d00; font-weight:700; }
+        .card-title { font-weight:600; }
+        .crm-nav .nav-link { color:#fff; opacity:.9; }
+        .crm-nav .nav-link:hover { opacity:1; }
+    </style>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <div class="container">
+        <a class="navbar-brand fw-semibold" href="#">Товары</a>
+        <div class="crm-nav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="#">Все Заявки</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Новые Заявки</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Обработанные Заявки</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">+ Добавить заявку</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container my-4">
+    <form method="post" action="items/add">
+        <div class="mb-3">
+            <label for="name" class="form-label">Название</label>
+            <input type="text" name="name" class="form-control" id="name">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Описание</label>
+            <input type="text" name="description" class="form-control" id="description">
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Цена</label>
+            <input type="number" name="price" class="form-control" id="price">
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+    <div class="row g-3">
+
+        <div class="col-12 col-md-6" th:each="item : ${items}">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="card-title">
+                        <span th:text="${item.name}">Название</span>
+                    </div>
+
+                    <div class="mb-2 small">
+                        <span class="fw-semibold" th:text="${item.description}">Описание</span>
+                    </div>
+
+                    <div class="mb-2 small">
+                        <span class="fw-semibold" th:text="${item.price}">Цена</span>
+                    </div>
+
+                    <div class="d-flex gap-3 align-items-center">
+
+                        <!-- пример ссылки на детальную страницу -->
+                        <a class="link-primary small" th:href="${'/items/' + item.getId()}">
+                            Подробнее
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /цикл -->
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
