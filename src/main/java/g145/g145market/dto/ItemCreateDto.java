@@ -46,4 +46,5 @@ public class ItemCreateDto {
     @NotNull(message = "Can't be null")
     @NotBlank(message = "Can't be null")
     private String made_in;
+
 }

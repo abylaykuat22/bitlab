@@ -9,6 +9,9 @@ import lombok.*;
 @Getter
 @Setter
 public class ItemResponse {
+    @JsonAlias("id")
+    private Long id;
+
     @JsonAlias("name_kz")
     private String name_kz;
 
@@ -29,4 +32,7 @@ public class ItemResponse {
 
     @JsonAlias("made_in")
     private String made_in;
+
+    @JsonAlias("created_at")
+    private String createdAt;
 }
