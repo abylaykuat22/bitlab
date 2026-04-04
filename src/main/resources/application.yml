@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: g145-market
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=g145market
+    username: postgres
+    password: postgres
