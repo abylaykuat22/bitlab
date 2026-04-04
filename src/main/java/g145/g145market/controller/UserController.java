@@ -1,11 +1,12 @@
 package g145.g145market.controller;
 
-import g145.g145market.entity.User;
+import g145.g145market.dto.UserCreateDto;
+import g145.g145market.dto.UserResponse;
 import g145.g145market.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,7 +18,12 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> getUsers() {
+    public List getUsers() {
         return null;
+    }
+
+    @PostMapping
+    public ResponseEntity<UserResponse> addUser(@Valid @RequestBody UserCreateDto dto) {
+        return ResponseEntity.status(201).body(userService.addUser(dto));
     }
 }

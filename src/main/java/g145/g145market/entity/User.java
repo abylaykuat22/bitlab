@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class User extends BaseEntity {
 
     @Column(name = "FULL_NAME", length = 100, nullable = false)
