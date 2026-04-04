@@ -1,5 +1,4 @@
 spring:
-
   application:
     name: g145-market
 
@@ -11,3 +10,5 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+server:
+  port: 8088
