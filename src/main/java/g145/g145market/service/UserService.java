@@ -6,7 +6,6 @@ import g145.g145market.entity.User;
 import g145.g145market.exception.EmailUniqueException;
 import g145.g145market.exception.PhoneNumberUniqueException;
 import g145.g145market.repository.UserRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserResponse addUser(@Valid UserCreateDto dto) {
+    public UserResponse addUser(UserCreateDto dto) {
         log.info("STARTED addUser. Params: {}", dto);
 
         if (userRepository.existsByEmail(dto.getEmail())) {
