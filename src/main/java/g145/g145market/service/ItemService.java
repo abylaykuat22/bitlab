@@ -5,11 +5,17 @@ import g145.g145market.dto.ItemResponse;
 import g145.g145market.entity.Item;
 import g145.g145market.repository.ItemRepository;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+@Service
+@RequiredArgsConstructor
 
 public class ItemService {
-    private ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
 
     public ItemResponse addItem(@Valid ItemCreateDto dto) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -38,4 +44,25 @@ public class ItemService {
                 .build();
         return itemResponse;
     }
+
+    public  List<ItemResponse> getItem() {
+        return itemRepository.findAll().stream().map(
+                item->ItemResponse.builder()
+                        .name_kz(item.getName_kz())
+                        .name_ru(item.getName_ru())
+                        .name_en(item.getName_en())
+                        .price(item.getPrice())
+                        .amount(item.getAmount())
+                        .status(item.getStatus())
+                        .made_in(item.getMade_in())
+                        .createdAt(item.getCreatedAt().toString())
+                        .build()
+        ).toList();
+    }
+    public ItemResponse updateItem(ItemCreateDto dto) {
+        Long dtoId = item.getId();
+        Item changedItem = itemRepository.findAllById();
+        return null;
+    }
+
 }
