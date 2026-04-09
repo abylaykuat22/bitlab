@@ -59,10 +59,10 @@ public class ItemService {
                         .build()
         ).toList();
     }
-    public ItemResponse updateItem(ItemCreateDto dto) {
-        Long dtoId = item.getId();
-        Item changedItem = itemRepository.findAllById();
-        return null;
-    }
+//    public ItemResponse updateItem(ItemCreateDto dto) {
+//        Long dtoId = item.getId();
+//        Item changedItem = itemRepository.findAllById();
+//        return null;
+//    }
 
 }

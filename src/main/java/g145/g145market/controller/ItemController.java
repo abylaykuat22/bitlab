@@ -25,10 +25,10 @@ public class ItemController {
     public ResponseEntity<ItemResponse> addItem(@RequestBody ItemCreateDto dto){
         return ResponseEntity.status(201).body(itemService.addItem(dto));
     }
-    @PutMapping
-    public ResponseEntity<ItemResponse> updateItem(@RequestBody ItemCreateDto dto){
-        return ResponseEntity.status(201).body(itemService.updateItem(dto));
-    }
+//    @PutMapping
+//    public ResponseEntity<ItemResponse> updateItem(@RequestBody ItemCreateDto dto){
+//        return ResponseEntity.status(201).body(itemService.updateItem(dto));
+//    }
 
 
 }

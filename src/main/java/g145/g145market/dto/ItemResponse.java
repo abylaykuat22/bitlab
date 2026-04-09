@@ -3,7 +3,6 @@ package g145.g145market.dto;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.*;
 
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
