@@ -25,10 +25,14 @@ public class ItemController {
     public ResponseEntity<ItemResponse> addItem(@RequestBody ItemCreateDto dto){
         return ResponseEntity.status(201).body(itemService.addItem(dto));
     }
-//    @PutMapping
-//    public ResponseEntity<ItemResponse> updateItem(@RequestBody ItemCreateDto dto){
-//        return ResponseEntity.status(201).body(itemService.updateItem(dto));
-//    }
-
-
+    @PutMapping("/{id}")
+    public ResponseEntity<ItemResponse> updateItem(@PathVariable Long id,
+            @RequestBody ItemCreateDto dto){
+        return ResponseEntity.status(200).body(itemService.updateItem(id,dto));
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteItem(@PathVariable Long id){
+        itemService.deleteItem(id);
+        return ResponseEntity.status(200).build();
+    }
 }

@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,10 +60,34 @@ public class ItemService {
                         .build()
         ).toList();
     }
-//    public ItemResponse updateItem(ItemCreateDto dto) {
-//        Long dtoId = item.getId();
-//        Item changedItem = itemRepository.findAllById();
-//        return null;
-//    }
+    public ItemResponse updateItem(Long id,ItemCreateDto dto) {
+        Item item = itemRepository.findById(id).orElseThrow(()->new NullPointerException("Don't data"));
+        item.setName_en(dto.getName_ru());
+        item.setName_ru(dto.getName_ru());
+        item.setName_en(dto.getName_en());
+        item.setPrice(dto.getPrice());
+        item.setAmount(dto.getAmount());
+        item.setStatus(dto.getStatus());
+        item.setMade_in(dto.getMade_in());
+        item.setUpdatedAt(LocalDate.now());
 
+        Item saveIt = itemRepository.save(item);
+
+        ItemResponse itemResponse = ItemResponse.builder()
+                .name_kz(saveIt.getName_kz())
+                .name_ru(saveIt.getName_ru())
+                .name_en(saveIt.getName_en())
+                .price(saveIt.getPrice())
+                .amount(saveIt.getAmount())
+                .status(saveIt.getStatus())
+                .made_in(saveIt.getMade_in())
+                .createdAt(saveIt.getCreatedAt().toString())
+                .build();
+        return itemResponse;
+    }
+
+    public void deleteItem(Long id) {
+        Item item = itemRepository.findById(id).orElseThrow(()->new NullPointerException("Don't data"));
+        itemRepository.delete(item);
+    }
 }
