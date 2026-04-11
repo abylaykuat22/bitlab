@@ -1,9 +1,8 @@
 package g145.g145market.entity;
 
 import g145.g145market.entity.base.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import g145.g145market.entity.enums.ItemStatus;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -29,8 +28,9 @@ public class Item extends BaseEntity {
     @Column(name = "AMOUNT")
     private Integer amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "STATUS",nullable = false)
-    private String status; //(в наличии, нет в наличи, ожидает доставки)
+    private ItemStatus status; //(в наличии, нет в наличи, ожидает доставки)
 
     @Column(name = "MADE_IN",nullable = false)
     private String made_in;

@@ -1,6 +1,7 @@
 package g145.g145market.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import g145.g145market.entity.enums.ItemStatus;
 import lombok.*;
 
 
@@ -29,7 +30,7 @@ public class ItemResponse {
     private Integer amount;
 
     @JsonAlias("status")
-    private String status;
+    private ItemStatus status;
 
     @JsonAlias("made_in")
     private String made_in;

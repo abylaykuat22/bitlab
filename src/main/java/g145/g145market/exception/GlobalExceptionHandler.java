@@ -62,4 +62,13 @@ public class GlobalExceptionHandler {
                         .exception(e.getClass().getName())
                         .build());
     }
+    @ExceptionHandler(EnumException.class)
+    public ResponseEntity<HttpExceptionResponse> handleEnumException(EnumException e){
+        return ResponseEntity.badRequest().body(
+                HttpExceptionResponse.builder()
+                        .status(400)
+                        .message("CHOOSE ONE OF THEM: AVAILABLE/WAITING/NOT_AVAILABLE")
+                        .exception(e.getClass().getName())
+                        .build());
+    }
 }

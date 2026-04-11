@@ -1,6 +1,7 @@
 package g145.g145market.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import g145.g145market.entity.enums.ItemStatus;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -40,7 +41,7 @@ public class ItemCreateDto {
     @JsonAlias("status")
     @NotNull(message = "Can't be null")
     @NotBlank(message = "Can't be null")
-    private String status;//(в наличии, нет в наличи, ожидает доставки)
+    private ItemStatus status;//(в наличии, нет в наличи, ожидает доставки)
 
     @JsonAlias("made_in")
     @NotNull(message = "Can't be null")

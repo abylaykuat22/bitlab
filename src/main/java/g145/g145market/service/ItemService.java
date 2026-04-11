@@ -39,7 +39,7 @@ public class ItemService {
                 .name_en(savedItem.getName_en())
                 .price(savedItem.getPrice())
                 .amount(savedItem.getAmount())
-                .status(savedItem.getStatus())
+                .status((savedItem.getStatus()))
                 .made_in(savedItem.getMade_in())
                 .createdAt(savedItem.getCreatedAt().toString())
                 .build();
@@ -54,7 +54,7 @@ public class ItemService {
                         .name_en(item.getName_en())
                         .price(item.getPrice())
                         .amount(item.getAmount())
-                        .status(item.getStatus())
+                        .status((item.getStatus()))
                         .made_in(item.getMade_in())
                         .createdAt(item.getCreatedAt().toString())
                         .build()
@@ -79,7 +79,7 @@ public class ItemService {
                 .name_en(saveIt.getName_en())
                 .price(saveIt.getPrice())
                 .amount(saveIt.getAmount())
-                .status(saveIt.getStatus())
+                .status((saveIt.getStatus()))
                 .made_in(saveIt.getMade_in())
                 .createdAt(saveIt.getCreatedAt().toString())
                 .build();
@@ -89,5 +89,6 @@ public class ItemService {
     public void deleteItem(Long id) {
         Item item = itemRepository.findById(id).orElseThrow(()->new NullPointerException("Don't data"));
         itemRepository.delete(item);
+        itemRepository.save(item);
     }
 }
