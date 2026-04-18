@@ -18,7 +18,7 @@ public class UserCreateDto {
     @JsonAlias({"full_name", "name"})
     @NotNull(message = "can't be null")
     @NotBlank(message = "can't be blank")
-    private String fullName;
+    private String name;
 
     @JsonProperty("birthdate")
     @NotNull(message = "can't be null")

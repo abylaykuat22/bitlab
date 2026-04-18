@@ -5,13 +5,11 @@ import g145.g145market.dto.UserResponse;
 import g145.g145market.entity.User;
 import g145.g145market.exception.EmailUniqueException;
 import g145.g145market.exception.PhoneNumberUniqueException;
+import g145.g145market.mapper.UserMapper;
 import g145.g145market.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -31,25 +29,10 @@ public class UserService {
             throw new PhoneNumberUniqueException("Phone number already exists with phone number " + dto.getPhoneNumber());
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        User user = User.builder()
-                .fullName(dto.getFullName())
-                .email(dto.getEmail())
-                .phoneNumber(dto.getPhoneNumber())
-                .address(dto.getAddress())
-                .birthdate(LocalDate.parse(dto.getBirthdate(), formatter))
-                .build();
+        User user = UserMapper.INSTANCE.toEntity(dto);
         User savedUser = userRepository.save(user);
 
-        UserResponse userResponse = UserResponse.builder()
-                .id(savedUser.getId())
-                .fullName(savedUser.getFullName())
-                .email(savedUser.getEmail())
-                .phoneNumber(savedUser.getPhoneNumber())
-                .address(savedUser.getAddress())
-                .birthdate(savedUser.getBirthdate().toString())
-                .createdAt(savedUser.getCreatedAt().toString())
-                .build();
+        UserResponse userResponse = UserMapper.INSTANCE.toDto(savedUser);
 
         log.info("COMPLETED addUser. Params: {}", savedUser);
         return userResponse;

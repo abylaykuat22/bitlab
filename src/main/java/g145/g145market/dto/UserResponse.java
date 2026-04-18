@@ -1,10 +1,6 @@
 package g145.g145market.dto;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 @Getter
@@ -20,14 +16,14 @@ public class UserResponse {
     @JsonProperty("full_name")
     private String fullName;
 
-    @JsonProperty("birthdate")
-    private String birthdate;
+    @JsonProperty("date_of_birth")
+    private String dateOfBirth;
 
     @JsonProperty("email")
     private String email;
 
     @JsonProperty("phone_number")
-    private String phoneNumber;
+    private String number;
 
     @JsonProperty("address")
     private String address;
