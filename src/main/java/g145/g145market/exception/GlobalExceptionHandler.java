@@ -71,4 +71,13 @@ public class GlobalExceptionHandler {
                         .exception(e.getClass().getName())
                         .build());
     }
+    @ExceptionHandler(CodeUniqueException.class)
+    public ResponseEntity<HttpExceptionResponse> handleCodeUniqueException(CodeUniqueException e) {
+        return ResponseEntity.badRequest().body(
+                HttpExceptionResponse.builder()
+                        .status(400)
+                        .message(e.getMessage())
+                        .exception(e.getClass().getName())
+                        .build());
+    }
 }

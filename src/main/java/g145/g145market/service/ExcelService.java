@@ -1,9 +1,12 @@
 package g145.g145market.service;
 
 import com.github.pjfanning.xlsx.StreamingReader;
+import g145.g145market.dto.CategoryResponse;
 import g145.g145market.dto.UserResponse;
+import g145.g145market.entity.Category;
 import g145.g145market.entity.Document;
 import g145.g145market.entity.User;
+import g145.g145market.repository.CategoryRepository;
 import g145.g145market.repository.DocumentRepository;
 import g145.g145market.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ public class ExcelService {
 
     private final UserRepository userRepository;
     private final DocumentRepository documentRepository;
+    private final CategoryRepository categoryRepository;
 
     public ByteArrayInputStream exportUsers() {
         List<User> users = userRepository.findAll();
@@ -151,8 +155,8 @@ public class ExcelService {
 
                 UserResponse response = UserResponse.builder()
                         .fullName(row.getCell(0).getStringCellValue())
-                        .birthdate(row.getCell(1).getStringCellValue())
-                        .phoneNumber(row.getCell(2).getStringCellValue())
+                        .dateOfBirth(row.getCell(1).getStringCellValue())
+                        .number(row.getCell(2).getStringCellValue())
                         .email(row.getCell(3).getStringCellValue())
                         .address(row.getCell(4).getStringCellValue())
                         .build();
@@ -173,4 +177,5 @@ public class ExcelService {
                 .bufferSize(4096)
                 .open(inputStream);
     }
+
 }
