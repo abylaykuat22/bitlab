@@ -4,6 +4,7 @@ import g145.g145market.dto.ItemCreateDto;
 import g145.g145market.dto.ItemResponse;
 import g145.g145market.repository.ItemRepository;
 import g145.g145market.service.ItemService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class ItemController {
         return itemResponse;
     }
     @PostMapping
-    public ResponseEntity<ItemResponse> addItem(@RequestBody ItemCreateDto dto){
+    public ResponseEntity<ItemResponse> addItem(@Valid @RequestBody ItemCreateDto dto){
         return ResponseEntity.status(201).body(itemService.addItem(dto));
     }
     @PutMapping("/{id}")

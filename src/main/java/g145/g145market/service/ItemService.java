@@ -7,10 +7,10 @@ import g145.g145market.repository.ItemRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
@@ -18,6 +18,7 @@ import java.util.List;
 public class ItemService {
     private final ItemRepository itemRepository;
 
+    @Transactional
     public ItemResponse addItem(@Valid ItemCreateDto dto) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         Item item = Item.builder()
@@ -30,6 +31,16 @@ public class ItemService {
                 .made_in(dto.getMade_in())
                 .build();
         Item savedItem = itemRepository.save(item);
+
+        Item item1 = new Item();
+        item1.setName_kz(dto.getName_kz());
+        item1.setName_ru(dto.getName_ru());
+        item1.setName_en(dto.getName_en());
+        item1.setPrice(dto.getPrice() + 1000);
+        item1.setAmount(dto.getAmount());
+        item1.setStatus(dto.getStatus());
+        item1.setMade_in(dto.getMade_in());
+        itemRepository.save(item1);
 
 
         ItemResponse itemResponse = ItemResponse.builder()
