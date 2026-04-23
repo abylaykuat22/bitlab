@@ -3,9 +3,9 @@ spring:
     name: g145-market
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=g145market
     username: postgres
-    password:
+    password: postgres
 
   jpa:
     hibernate:

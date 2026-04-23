@@ -72,7 +72,7 @@ public class ItemService {
         ).toList();
     }
     public ItemResponse updateItem(Long id,ItemCreateDto dto) {
-        Item item = itemRepository.findById(id).orElseThrow(()->new NullPointerException("Don't data"));
+        Item item = itemRepository.findById(id).orElseThrow(()->new NullPointerException("Don't data")); // TODO: корректный exception
         item.setName_en(dto.getName_ru());
         item.setName_ru(dto.getName_ru());
         item.setName_en(dto.getName_en());
