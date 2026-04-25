@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 @MappedSuperclass
 @Getter
@@ -17,18 +17,18 @@ public class BaseEntity {
     private Long id;
 
     @Column(name = "CREATED_AT")
-    private LocalDate createdAt;
+    private Instant createdAt;
 
     @Column(name = "UPDATED_AT")
-    private LocalDate updatedAt;
+    private Instant updatedAt;
 
     @PrePersist
     public void prePersist() {
-        createdAt = LocalDate.now();
+        createdAt = Instant.now();
     }
 
     @PreUpdate
     public void preUpdate() {
-        updatedAt = LocalDate.now();
+        updatedAt = Instant.now();
     }
 }

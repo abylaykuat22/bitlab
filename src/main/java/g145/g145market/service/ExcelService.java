@@ -1,9 +1,7 @@
 package g145.g145market.service;
 
 import com.github.pjfanning.xlsx.StreamingReader;
-import g145.g145market.dto.CategoryResponse;
 import g145.g145market.dto.UserResponse;
-import g145.g145market.entity.Category;
 import g145.g145market.entity.Document;
 import g145.g145market.entity.User;
 import g145.g145market.repository.CategoryRepository;
@@ -19,6 +17,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -118,7 +118,9 @@ public class ExcelService {
 
                 Cell creationDateCell = row.createCell(6);
                 creationDateCell.setCellStyle(textStyle);
-                creationDateCell.setCellValue(user.getCreatedAt());
+                ZoneId zoneId = ZoneId.systemDefault();
+                LocalDateTime createdAt = user.getCreatedAt().atZone(zoneId).toLocalDateTime();
+                creationDateCell.setCellValue(createdAt);
 
                 rowNum++;
             }

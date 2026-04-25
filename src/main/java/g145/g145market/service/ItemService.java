@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 @Service
@@ -80,7 +80,7 @@ public class ItemService {
         item.setAmount(dto.getAmount());
         item.setStatus(dto.getStatus());
         item.setMade_in(dto.getMade_in());
-        item.setUpdatedAt(LocalDate.now());
+        item.setUpdatedAt(Instant.now());
 
         Item saveIt = itemRepository.save(item);
 

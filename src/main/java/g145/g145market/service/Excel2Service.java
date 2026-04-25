@@ -17,6 +17,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,7 +54,9 @@ public class Excel2Service {
                 row.createCell(2).setCellValue(categoryResponse.getNameRu());
                 row.createCell(3).setCellValue(categoryResponse.getNameEn());
                 row.createCell(4).setCellValue(categoryResponse.getCode());
-                row.createCell(5).setCellValue(categoryResponse.getCreatedAt());
+                ZoneId zoneId = ZoneId.systemDefault();
+                LocalDateTime localDateTime = categoryResponse.getCreatedAt().atZone(zoneId).toLocalDateTime();
+                row.createCell(5).setCellValue(localDateTime);
                 rowNum++;
             }
             workbook.write(outputStream);
