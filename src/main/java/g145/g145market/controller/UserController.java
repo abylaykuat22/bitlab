@@ -1,5 +1,6 @@
 package g145.g145market.controller;
 
+import g145.g145market.dto.ChangePasswordDto;
 import g145.g145market.dto.UserCreateDto;
 import g145.g145market.dto.UserResponse;
 import g145.g145market.service.ExcelService;
@@ -24,14 +25,15 @@ public class UserController {
     private final UserService userService;
     private final ExcelService excelService;
 
-    @GetMapping
-    public List getUsers() {
-        return null;
+    @PostMapping("/register")
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserCreateDto dto) {
+        return ResponseEntity.status(201).body(userService.register(dto));
     }
 
-    @PostMapping
-    public ResponseEntity<UserResponse> addUser(@Valid @RequestBody UserCreateDto dto) {
-        return ResponseEntity.status(201).body(userService.addUser(dto));
+    @PostMapping("/change-password")
+    public ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordDto dto) {
+        userService.changePassword(dto);
+        return ResponseEntity.status(200).build();
     }
 
     @GetMapping("/export")

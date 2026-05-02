@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,6 +49,7 @@ public class ItemController {
                     description = "Ошибка сервера"
             )
     })
+    @PreAuthorize("hasAnyRole('MANAGER')")
     @PostMapping
     public ResponseEntity<ItemResponse> addItem(@Valid @RequestBody ItemCreateDto dto) {
         return ResponseEntity.status(201).body(itemService.addItem(dto));

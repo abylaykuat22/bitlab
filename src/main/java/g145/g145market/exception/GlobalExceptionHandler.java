@@ -4,6 +4,7 @@ package g145.g145market.exception;
 import g145.g145market.dto.HttpExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -74,6 +75,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CodeUniqueException.class)
     public ResponseEntity<HttpExceptionResponse> handleCodeUniqueException(CodeUniqueException e) {
         return ResponseEntity.badRequest().body(
+                HttpExceptionResponse.builder()
+                        .status(400)
+                        .message(e.getMessage())
+                        .exception(e.getClass().getName())
+                        .build());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<HttpExceptionResponse> handleAccessDeniedException(AccessDeniedException e) {
+        return ResponseEntity.status(403).body(
+                HttpExceptionResponse.builder()
+                        .status(403)
+                        .message(e.getMessage())
+                        .exception(e.getClass().getName())
+                        .build());
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<HttpExceptionResponse> handleBadRequestException(BadRequestException e) {
+        return ResponseEntity.status(400).body(
                 HttpExceptionResponse.builder()
                         .status(400)
                         .message(e.getMessage())

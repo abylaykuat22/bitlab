@@ -2,10 +2,8 @@ package g145.g145market.controller;
 
 import g145.g145market.dto.CategoryCreateDto;
 import g145.g145market.dto.CategoryResponse;
-import g145.g145market.repository.CategoryRepository;
 import g145.g145market.service.CategoryService;
 import g145.g145market.service.Excel2Service;
-import g145.g145market.service.ExcelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -14,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.service.annotation.GetExchange;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -25,6 +22,7 @@ import java.util.List;
 public class CategoryController {
     private final CategoryService categoryService;
     private final Excel2Service excel2Service;
+
     @GetMapping
     public List<CategoryResponse> getCategory(){
         List<CategoryResponse> categoryResponses = categoryService.getCategory();

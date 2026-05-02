@@ -29,6 +29,10 @@ public class UserCreateDto {
     @NotBlank(message = "can't be blank")
     private String email;
 
+    @NotNull(message = "can't be null")
+    @NotBlank(message = "can't be blank")
+    private String password;
+
     @JsonProperty("phone_number")
     @NotNull(message = "can't be null")
     @NotBlank(message = "can't be blank")
