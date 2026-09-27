@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/main.html">
+<head>
+  <title>HOME PAGE</title>
+</head>
+<div layout:fragment="content">
+  <table class="table table-striped">
+    <thead>
+      <th>ID</th>
+      <th>NAME</th>
+      <th>SURNAME</th>
+      <th>EXAM</th>
+      <th>MARK</th>
+    </thead>
+    <tbody>
+      <tr th:each="student : ${students}">
+        <td th:class="${student.mark == 'F'
+          ? 'text-danger'
+          : 'text-success'}"
+            th:text="${student.id}"></td>
+        <td th:class="${student.mark == 'F'
+          ? 'text-danger'
+          : 'text-success'}"
+            th:text="${student.name}"></td>
+        <td th:class="${student.mark == 'F'
+          ? 'text-danger'
+          : 'text-success'}"
+            th:text="${student.surname}"></td>
+        <td th:class="${student.mark == 'F'
+          ? 'text-danger'
+          : 'text-success'}"
+            th:text="${student.exam}"></td>
+        <td th:class="${student.mark == 'F'
+          ? 'text-danger'
+          : 'text-success'}"
+            th:text="${student.mark}"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</html>
