@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/main.html">
+<div layout:fragment="content">
+  <form action="/editAppReq" method="post">
+    <input type="hidden" name="id" th:value="${appReq.id}">
+    <label>Course name:</label>
+    <input th:value="${appReq.courseName}" type="text" name="courseName" class="form-control"><br>
+    <label>Commentary:</label>
+    <input th:value="${appReq.commentary}" name="commentary" type="text" class="form-control"><br>
+    <label>Phone:</label>
+    <input th:value="${appReq.phone}" name="phone" type="text" class="form-control"><br>
+    <label>User:</label>
+    <select name="user.id" class="form-select">
+      <option
+        th:each="user : ${users}"
+        th:text="${user.fullName}"
+        th:value="${user.id}"
+        th:selected="${user.id == appReq.user.id}">
+      </option>
+    </select><br>
+    <button class="btn btn-primary">Сохранить изменения!</button>
+  </form>
+  <br>
+  <form th:action="${'/updateHandled/'+appReq.id}" method="post">
+    <button class="btn btn-success">Обработать заявку!</button>
+  </form>
+  <br>
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRequest">
+    Удалить!
+  </button>
+
+  <!-- Modal -->
+  <form th:action="${'/deleteAppReq/'+appReq.id}" method="post">
+    <div class="modal fade" id="deleteRequest" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Вы уверены?</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-danger">Подтвердить удаление</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+</html>
