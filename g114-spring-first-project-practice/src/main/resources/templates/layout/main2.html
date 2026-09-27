@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:insert="~{head}">
+</head>
+<body>
+<h1>MAIN 2 ALTERNATIVE MAKET</h1>
+<div th:insert="~{navbar}"></div>
+<div class="container col-8 mx-auto">
+  <div class="row">
+    <div class="col-9">
+      <div layout:fragment="content">
+
+      </div>
+    </div>
+    <div class="col-3">
+      <div th:insert="~{sidebar}"></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

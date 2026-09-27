@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/main2.html">
+<div layout:fragment="content">
+  <div th:if="${item.amount == 0}" class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Товара нет в наличии!</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editItemModal">
+    EDIT ITEM
+  </button>
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteItemModal">
+    DELETE ITEM
+  </button>
+  <h1 class="text-center">DETAILS</h1>
+  <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+    <div class="col">
+      <div class="card mb-4 rounded-3 shadow-sm" style="background-color: #e3e3aa">
+        <div class="card-header py-3">
+          <h4 th:text="${item.name}" class="my-0 fw-normal"></h4></div>
+        <div class="card-body"><h1 th:text="${item.price}+'$'" class="card-title pricing-card-title">
+          <small
+              class="text-body-secondary fw-light"></small></h1>
+          <ul class="list-unstyled mt-3 mb-4">
+            <li th:text="${item.description}"></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal -->
+<form action="/edit-item" method="post">
+  <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel1">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="id" th:value="${item.id}">
+          <div class="mb-3">
+            <label  class="form-label">Name</label>
+            <input th:value="${item.name}" name="name" type="text" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <input th:value="${item.description}" name="description" type="text" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Price</label>
+            <input th:value="${item.price}" name="price" type="number" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Country</label>
+            <select class="form-select">
+              <option th:each="country : ${countries}"
+                      th:text="${country}"
+                      th:selected="${country.equals(item.country)}"
+              ></option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-select">
+              <option th:each="status : ${statuses}"
+                      th:text="${status}"
+                      th:selected="${item.itemStatus eq status}"
+              ></option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-primary">EDIT ITEM</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- Modal -->
+<form th:action="${'/delete-item/'+item.id}" method="post">
+  <div class="modal fade" id="deleteItemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">ARE U SURE?</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
+          <button class="btn btn-primary">YES</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+</div>
+</div>
+</html>
