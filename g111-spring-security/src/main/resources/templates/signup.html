@@ -1,0 +1,61 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      layout:decorate="layout/main.html">
+<div class="container col-6 mx-auto" layout:fragment="content">
+  <div class="alert alert-danger alert-dismissible fade show" role="alert"
+      th:if="${param.erroremail != null}">
+    <strong>Email is busy!</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert"
+       th:if="${param.errorpasswords != null}">
+    <strong>Passwords don't match!</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <div class="alert alert-success alert-dismissible fade show" role="alert"
+       th:if="${param.success != null}">
+    <strong>Account created successfully!</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <form th:action="@{'/signup'}" method="post">
+    <div class="row mt-5">
+      <div class="col-4">
+        EMAIL :
+      </div>
+      <div class="col-6">
+        <input class="form-control" type="email" name="email">
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4">
+        PASSWORD :
+      </div>
+      <div class="col-6">
+        <input class="form-control" type="text" name="password">
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4">
+        REPEAT PASSWORD :
+      </div>
+      <div class="col-6">
+        <input class="form-control" type="text" name="re_password">
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-4">
+        FULL NAME :
+      </div>
+      <div class="col-6">
+        <input class="form-control" type="text" name="full_name">
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-12">
+        <button class="btn btn-success">CREATE NEW ACCOUNT</button>
+      </div>
+    </div>
+  </form>
+</div>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<nav class="navbar navbar-expand-lg"  style="background-color: darkgray">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Spring Security</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" th:href="@{'/'}">Home</a>
+        </li>
+        <li class="nav-item" sec:authorize="isAnonymous()">
+          <a class="nav-link active" aria-current="page" th:href="@{'/signin'}">
+            Sign In
+          </a>
+        </li>
+        <li class="nav-item" sec:authorize="isAnonymous()">
+          <a class="nav-link active" aria-current="page" th:href="@{'/signup'}">
+            Sign Up
+          </a>
+        </li>
+        <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" \
+             aria-expanded="false" th:text="${#authentication.principal.fullName}">
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" th:href="@{'/updatepassword'}">Update password</a></li>
+            <li><a class="dropdown-item" th:href="@{'/profile'}">Profile</a></li>
+            <li>
+              <a class="dropdown-item" href="JavaScript:void(0)" onclick="exitForm.submit()" >Logout</a>
+              <form th:action="@{'/exit'}" method="post" id="exitForm"></form>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+</html>
