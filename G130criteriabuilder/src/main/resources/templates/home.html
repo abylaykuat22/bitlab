@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <div class="card px-3 py-3 my-3 ms-2 w-50">
+
+        <h4>Sort cars:</h4>
+
+        <form method="get" class="d-flex" th:action="@{'/'}">
+
+            <!-- Выбор параметра сущности (машины), по которому будет осуществляться сортировка -->
+            <div class="form-floating me-3" th:if="${sortBy != null}">
+                <select class="form-select" id="sort_by" aria-label="sort_by" name="sort_by">
+                    <option value="price" th:selected="${sortBy.equals('price')}">Price</option>
+                    <option value="name" th:selected="${sortBy.equals('name')}">Name</option>
+                    <option value="memory" th:selected="${sortBy.equals('memory')}">Memory</option>
+                    <option value="orm" th:selected="${sortBy.equals('orm')}">ORM</option>
+                </select>
+                <label for="sort_by">Sort by:</label>
+            </div>
+
+            <!-- Выбор порядка сортировки: по возрастанию или по убыванию -->
+            <div class="form-floating me-3" th:if="${sortOrder != null}">
+                <select class="form-select" id="sort_order" aria-label="sort_order" name="sort_order">
+                    <option value="ASC" th:selected="${sortOrder.equals('ASC')}">Ascending</option>
+                    <option value="DESC" th:selected="${sortOrder.equals('DESC')}">Descending</option>
+                </select>
+                <label for="sort_order">Order:</label>
+            </div>
+
+            <!-- Через это поле можно задать размер страницы -->
+            <div class="form-floating me-3">
+                <input type="text" class="form-control" id="size" name="size" placeholder="size" th:value="${param.size}">
+                <label for="size">Page size:</label>
+            </div>
+            <button type="submit" class="btn btn-success" style="height: 43.5pt;">Sort</button>
+        </form>
+    </div>
+
+    <form action="/dynamic-search" method="get">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>NAME</th>
+            <th>PRICE</th>
+            <th>BRAND</th>
+            <th>PROCESSOR</th>
+            <th>RAM</th>
+            <th>MEMORY</th>
+            <th>OS</th>
+        </tr>
+        </thead>
+        <tbody>
+        <td>
+            <input type="text" name="name" class="form-control">
+        </td>
+        <td>
+            <input type="number" name="price" class="form-control">
+        </td>
+        <td>
+            <select name="brand.id" class="form-control">
+                <option></option>
+                <option th:each="brand : ${brands}"
+                    th:text="${brand.name}"
+                    th:value="${brand.id}">
+                </option>
+            </select>
+        </td>
+        <td>
+            <select name="processor.id" class="form-control">
+                <option></option>
+                <option th:each="processor : ${processors}"
+                        th:text="${processor.name}"
+                        th:value="${processor.id}">
+                </option>
+            </select>
+        </td>
+        <td>
+            <select name="ram" class="form-control">
+                <option></option>
+                <option>8 gb</option>
+                <option>16 gb</option>
+                <option>32 gb</option>
+                <option>64 gb</option>
+            </select>
+        </td>
+        <td>
+            <select name="memory" class="form-control">
+                <option></option>
+                <option>256 gb</option>
+                <option>512 gb</option>
+                <option>1 tb</option>
+                <option>2 tb</option>
+            </select>
+        </td>
+        <td>
+            <select name="os" class="form-control">
+                <option></option>
+                <option>Windows</option>
+                <option>Mac os</option>
+                <option>Linux</option>
+            </select>
+        </td>
+        <td>
+            <button class="btn btn-success">Search</button>
+        </td>
+        </tbody>
+    </table>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>PRICE</th>
+            <th>BRAND</th>
+            <th>PROCESSOR</th>
+            <th>RAM</th>
+            <th>MEMORY</th>
+            <th>OS</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="notebook : ${notebooks}">
+            <td th:text="${notebook.id}"></td>
+            <td th:text="${notebook.name}"></td>
+            <td th:text="${notebook.price}"></td>
+            <td th:text="${notebook.brand.name}"></td>
+            <td th:text="${notebook.processor.name}"></td>
+            <td th:text="${notebook.ram}"></td>
+            <td th:text="${notebook.memory}"></td>
+            <td th:text="${notebook.os}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <!-- Навигационная панель -->
+    <nav aria-label="Pagination navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+
+            <!-- Переход на предыдущую страницу -->
+            <!-- Будет заблокирована возможность перейти на предыдущую страницу, если открыта первая страница. (Не забываем о том, что нумерация страниц начинается с нуля) -->
+            <li th:class="${currentPage == 0 ? 'page-item disabled' : 'page-item'}">
+                <!-- Данная ссылка (кнопка) будет загружать предыдущую страницу -->
+                <a class="page-link" th:href="@{'/?page=' + ${currentPage - 1} + '&size=' + ${pageSize}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <!-- Горизонтальный список всех страниц -->
+            <li th:each="pageNumber : ${pageNumbers}" class="page-item">
+                <!-- Будет загружена та страница, на номер которой Вы нажмете -->
+                <!-- Текущая страница будет выделена -->
+                <a th:class="${pageNumber == currentPage ? 'page-link active' : 'page-link'}" th:href="@{'/?page=' + ${pageNumber} + '&size=' + ${pageSize}}" th:text="${pageNumber + 1}"></a>
+            </li>
+
+            <!-- Переход на следующую страницу -->
+            <!-- Будет заблокирована возможность перейти на следующую страницу, если открыта последняя страница. (Последняя страница имеет номер N-1) -->
+            <li th:class="${currentPage == totalPages - 1 ? 'page-item disabled' : 'page-item'}">
+                <!-- Данная ссылка (кнопка) будет загружать следующую страницу -->
+                <a class="page-link" th:href="@{'/?page=' + ${currentPage + 1} + '&size=' + ${pageSize}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</html>
