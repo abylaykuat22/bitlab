@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<form action="/edit-item" method="post">
+  <input type="hidden" th:value="${tovar.id}" name="id">
+  <input type="text" name="name" th:value="${tovar.getName}" placeholder="Insert name"><br><br>
+  <input type="text" name="description" th:value="${tovar.description}" placeholder="Insert description"><br><br>
+  <input type="text" name="price" th:value="${tovar.price}" placeholder="Insert price"><br><br>
+  <button>EDIT ITEM</button>
+</form>
+<form th:action="${'/delete-item/'+tovar.id}" method="post">
+  <button>DELETE</button>
+</form>
+</body>
+</html>
