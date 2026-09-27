@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <link type="text/css" rel="stylesheet" th:href="@{'/css/bootstrap.min.css'}">
+  <script type="text/javascript" th:src="@{'/js/bootstrap.bundle.js'}"></script>
+</head>
+<body>
+  <div class="container">
+<!--     Button trigger modal-->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editItemModal">
+      EDIT ITEM +
+    </button>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteItemModal">
+      DELETE ITEM -
+    </button>
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 th:text="${zat.name}" class="card-title"></h5>
+        <h6 th:text="${zat.price}" class="card-subtitle mb-2 text-body-secondary"></h6>
+        <h6 th:text="${zat.category}"></h6>
+        <p th:text="${zat.description}" class="card-text"></p>
+      </div>
+    </div>
+  </div>
+
+
+
+<!--   Modal -->
+  <form th:action="${'/delete-item/'+zat.id}" method="post">
+  <div class="modal fade" id="deleteItemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">ARE U SURE?</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
+          <button class="btn btn-danger">YES</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+
+  <form th:action="${'/edit-item/'+zat.id}" method="post">
+    <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">EDIT ITEM</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input th:value="${zat.name}" name="item_name" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <input th:value="${zat.description}" name="item_description" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Category</label>
+              <input th:value="${zat.category}" name="item_category" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Price</label>
+              <input th:value="${zat.price}" name="item_price" type="number" class="form-control">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-success">EDIT ITEM</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</body>
+</html>

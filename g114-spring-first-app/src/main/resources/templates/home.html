@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <link type="text/css" rel="stylesheet" th:href="@{'/css/bootstrap.min.css'}">
+  <script type="text/javascript" th:src="@{'/js/bootstrap.bundle.js'}"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">
+      ADD ITEM +
+    </button>
+    <table class="table table-striped">
+      <thead>
+      <th>ID</th>
+      <th>NAME</th>
+      <th>DESCRIPTION</th>
+      <th>CATEGORY</th>
+      <th>PRICE</th>
+      <th>DETAILS</th>
+      </thead>
+      <tbody>
+      <tr th:each="item : ${items}">
+        <td th:text="${item.id}"></td>
+        <td th:text="${item.name}"></td>
+        <td th:text="${item.description}"></td>
+        <td th:text="${item.category}"></td>
+        <td th:text="${item.price}"></td>
+        <td><a class="btn btn-dark" th:href="${'/details/'+item.id}">DETAILS</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+  <!-- Modal -->
+  <form action="/add-item" method="post">
+  <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">ADD ITEM</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input name="name" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <input name="description" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Category</label>
+              <input name="category" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Price</label>
+              <input name="price" type="number" class="form-control">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-success">CREATE ITEM</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+</body>
+</html>
