@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Детали машины</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body class="container">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Детали машины</h5>
+            <form action="/cars/update" method="post">
+                <input type="hidden" th:value="${mashina.getId()}" name="id">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Название</label>
+                    <input type="text" name="name" class="form-control" id="name" th:value="${mashina.getName()}">
+                </div>
+                <div class="mb-3">
+                    <label for="year" class="form-label">Год</label>
+                    <input type="number" name="year" class="form-control" id="year" th:value="${mashina.getYear()}">
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Цена</label>
+                    <input type="number" name="price" class="form-control" id="price" th:value="${mashina.getPrice()}">
+                </div>
+                <div class="mb-3">
+                    <label for="color" class="form-label">Цвет</label>
+                    <input type="text" name="color" class="form-control" id="color" th:value="${mashina.getColor()}">
+                </div>
+                <button class="btn btn-success">UPDATE</button>
+            </form>
+            <form th:action="${'/cars/delete/' + mashina.getId()}" method="post">
+                <button class="btn btn-dark">DELETE</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>

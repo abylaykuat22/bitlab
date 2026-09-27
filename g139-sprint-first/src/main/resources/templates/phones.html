@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Студенты</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body class="container">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Брэнд</th>
+            <th>Модель</th>
+            <th>Память</th>
+            <th>Цена</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="phone : ${phones}">
+                <td th:text="${phone.getId()}"></td>
+                <td th:text="${phone.getBrand()}"></td>
+                <td th:text="${phone.getModel()}"></td>
+                <td th:text="${phone.getMemory()}"></td>
+                <td th:text="${phone.getPrice()}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <form method="post" action="phones/add">
+        <div class="mb-3">
+            <label for="brand" class="form-label">Брэнд</label>
+            <input type="text" name="brand" class="form-control" id="brand">
+        </div>
+        <div class="mb-3">
+            <label for="model" class="form-label">Модель</label>
+            <input type="text" name="model" class="form-control" id="model">
+        </div>
+        <div class="mb-3">
+            <label for="memory" class="form-label">Память</label>
+            <input type="text" name="memory" class="form-control" id="memory">
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>
