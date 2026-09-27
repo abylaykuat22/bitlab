@@ -1,0 +1,49 @@
+services:
+#  backend:
+#    image: 'abylaykuat/g139-app'
+#    container_name: java_backend
+#    depends_on:
+#      - database
+#    networks:
+#      - mynetwork
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/postgres
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=qwerty
+#    ports:
+#      - "8000:8080"
+
+  database:
+    image: 'postgres:15'
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwerty
+    ports:
+      - "4567:5432"
+    networks:
+      - mynetwork
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  minio:
+    image: 'minio/minio'
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+
+volumes:
+  postgres_data:
+  minio_data:
