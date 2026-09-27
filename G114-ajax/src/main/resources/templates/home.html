@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body onload="loadAcademies()">
+  <input type="hidden" id="id">
+  <input type="text" id="name" placeholder="Insert name"><br><br>
+  <input type="text" id="course" placeholder="Insert course"><br><br>
+  <input type="text" id="rating" placeholder="Insert rating"><br><br>
+  <button id='addBtn' onclick="addAcademy()">ADD ACADEMY</button>
+  <button id='editBtn' onclick="editAcademy()" style="display: none">EDIT ACADEMY</button>
+  <table id="academyTable">
+    <thead>
+      <th>ID</th>
+      <th>NAME</th>
+      <th>COURSE</th>
+      <th>RATING</th>
+      <th>DETAILS</th>
+      <th>DELETE</th>
+    </thead>
+    <tbody id="academiesData">
+    </tbody>
+  </table>
+  <script type="text/javascript">
+    function loadAcademies() {
+      let html = ""
+      let req = new XMLHttpRequest();
+      req.open("GET", "http://localhost:8080/academies")
+      req.send()
+      req.onload = function () {
+        let academies = JSON.parse(req.responseText)
+        for (let i = 0; i < academies.length; i++) {
+          html+="<tr>"
+          html+="<td>"+academies[i].id+"</td>"
+          html+="<td>"+academies[i].name+"</td>"
+          html+="<td>"+academies[i].course+"</td>"
+          html+="<td>"+academies[i].rating+"</td>"
+          html+="<td><button onclick='academyDetails("+academies[i].id+")'>DETAILS</button></td>"
+          html+="<td><button onclick='deleteAcademy("+academies[i].id+")'>DELETE</button></td>"
+          html+="<td><button onmouseover='showSomeText()'>SOME TEXT TEST</button></td>"
+          html+="</tr>"
+        }
+        document.getElementById('academiesData').innerHTML = html
+      }
+    }
+
+    function addAcademy() {
+      let name = document.getElementById('name').value
+      let course = document.getElementById('course').value
+      let rating = document.getElementById('rating').value
+
+      let academyObj = {
+        "name" : name,
+        "course" : course,
+        "rating" : rating
+      }
+
+      let req = new XMLHttpRequest()
+      req.open("POST", "http://localhost:8080/academies")
+      req.setRequestHeader("Content-type", "application/json")
+      req.send(JSON.stringify(academyObj))
+      req.onload = function () {
+        loadAcademies()
+      }
+    }
+
+    function academyDetails(id) {
+      let req = new XMLHttpRequest()
+      req.open("GET", "http://localhost:8080/academies/"+id)
+      req.send()
+      req.onload = function () {
+        let academy = JSON.parse(req.responseText)
+        document.getElementById('name').value = academy.name
+        document.getElementById('course').value = academy.course
+        document.getElementById('rating').value = academy.rating
+        document.getElementById('addBtn').style = 'display:none'
+        // document.getElementById('academyTable').style = 'display:none'
+        document.getElementById('editBtn').style = 'display:inline'
+        document.getElementById('id').value = academy.id
+      }
+    }
+
+    function editAcademy() {
+      let academyObj = {
+        "id" : document.getElementById('id').value,
+        "name" : document.getElementById('name').value,
+        "course" : document.getElementById('course').value,
+        "rating" : document.getElementById('rating').value
+      }
+
+      let req = new XMLHttpRequest()
+      req.open("PUT", "http://localhost:8080/academies")
+      req.setRequestHeader("Content-type", "application/json")
+      req.send(JSON.stringify(academyObj))
+      req.onload = function () {
+        loadAcademies()
+        document.getElementById('addBtn').style = 'display:inline'
+        document.getElementById('editBtn').style = 'display:none'
+        document.getElementById('name').value = ""
+        document.getElementById('course').value = ""
+        document.getElementById('rating').value = ""
+      }
+    }
+
+    function deleteAcademy(id) {
+      let req = new XMLHttpRequest();
+      req.open("DELETE", "http://localhost:8080/academies/"+id)
+      req.send()
+      req.onload = function () {
+        loadAcademies()
+      }
+    }
+
+    function showSomeText() {
+      alert("Some text")
+    }
+
+  </script>
+</body>
+</html>
