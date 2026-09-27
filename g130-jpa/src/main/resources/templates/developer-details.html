@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <form action="/developers/edit" method="post">
+        <input type="hidden" th:value="${developer.id}" name="id">
+        <input type="text"
+               th:value="${developer.fullName}"
+               name="fullName"
+               class="form-control"
+               placeholder="Insert fullname..."><br><br>
+        <input type="text"
+               th:value="${developer.email}"
+               name="email"
+               class="form-control"
+               placeholder="Insert email..."><br><br>
+        <input type="number"
+               th:value="${developer.age}"
+               name="age"
+               class="form-control"
+               placeholder="Insert age..."><br><br>
+        <select name="company.id" class="form-control">
+            <option th:each="company : ${компании}" th:value="${company.id}" th:text="${company.name}"
+                    th:selected="${company.id == developer.company.id}">
+            </option>
+        </select>
+        <button type="submit" class="btn btn-primary">Save Developer</button>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#mymodel1">
+            Delete
+        </button>
+    </form>
+
+
+    <!-- Modal -->
+    <form th:action="${'/developers/delete/' + developer.id}" method="post">
+        <div class="modal fade" id="mymodel1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="submit" class="btn btn-primary">YES</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <h1>Владеет:</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>DESCRIPTION</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="language : ${developer.getProgrammingLanguages()}">
+            <td th:text="${language.id}"></td>
+            <td th:text="${language.name}"></td>
+            <td th:text="${language.description}"></td>
+            <td>
+                <form action="/developers/programming-language/delete" method="post">
+                    <input type="hidden" name="developer_id" th:value="${developer.id}">
+                    <input type="hidden" name="programming_language_id" th:value="${language.id}">
+                    <button class="btn btn-danger">DELETE-</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h1>Не владеет:</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>DESCRIPTION</th>
+            <th>ADD</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="lang : ${langs}">
+            <td th:text="${lang.id}"></td>
+            <td th:text="${lang.name}"></td>
+            <td th:text="${lang.description}"></td>
+            <td>
+                <form action="/developers/programming-language/add" method="post">
+                    <input type="hidden" name="developer_id" th:value="${developer.id}">
+                    <input type="hidden" name="programming_language_id" th:value="${lang.id}">
+                    <button class="btn btn-success">ADD+</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</html>
