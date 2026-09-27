@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<form action="/developer/search" method="get">
+  <input type="text" name="search" placeholder="Search...">
+  <button>SEARCH</button>
+</form>
+<br><br>
+<form action="/developer/add" method="post">
+  <input type="text" placeholder="Insert full name.." name="fullName"><br>
+  <input type="text" placeholder="Insert email..." name="email"><br>
+  <input type="number" placeholder="Insert age..." name="age"><br>
+  <select name="programmingLanguage.id">
+    <option th:each="lang : ${programmingLanguages}"
+            th:value="${lang.id}"
+            th:text="${lang.name}"></option>
+  </select>
+  <button>ADD DEVELOPER</button>
+</form>
+  <table cellpadding="10px">
+    <thead>
+      <th>ID</th>
+      <th>FULL NAME</th>
+      <th>AGE</th>
+      <th>PROGRAMMING LANGUAGE</th>
+      <th>DETAILS</th>
+      <th>DETAILS BY EMAIl</th>
+    </thead>
+    <tbody>
+      <tr th:each="razrab : ${razraby}">
+        <td th:text="${razrab.id}"></td>
+        <td th:text="${razrab.fullName}"></td>
+        <td th:text="${razrab.age}"></td>
+        <td th:text="${razrab.programmingLanguage.name}"></td>
+        <td><a th:href="${'/developer/'+razrab.id}">DETAILS</a></td>
+        <td><a th:href="${'/developer/details/'+razrab.email}">DETAILS BY EMAIL</a></td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
