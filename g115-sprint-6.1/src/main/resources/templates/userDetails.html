@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <h1 th:text="${user.age + ' ' + user.firstName + ' ' + user.secondName}"></h1>
+
+  <div style="display: flex; justify-content: space-between">
+    <table cellpadding="10px">
+      <thead>
+      <th style="color: green">Города в которых был</th>
+      <th>ID</th>
+      <th>CITY NAME</th>
+      <th>CITY CODE</th>
+      </thead>
+      <tbody>
+      <tr th:each="userCity : ${user.cities}">
+        <td></td>
+        <td th:text="${userCity.id}"></td>
+        <td th:text="${userCity.name}"></td>
+        <td th:text="${userCity.code}"></td>
+        <td>
+          <form action="/users/delete-city" method="post">
+            <input type="hidden" name="user_id" th:value="${user.id}">
+            <input type="hidden" name="city_id" th:value="${userCity.id}">
+            <button style="color: red">REMOVE -</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <table cellpadding="10px">
+      <thead>
+      <th style="color: red">Города в которых не был</th>
+      <th>ID</th>
+      <th>CITY NAME</th>
+      <th>CITY CODE</th>
+      </thead>
+      <tbody>
+      <tr th:each="city : ${cities}">
+        <td></td>
+        <td th:text="${city.id}"></td>
+        <td th:text="${city.name}"></td>
+        <td th:text="${city.code}"></td>
+        <td>
+          <form action="/users/add-city" method="post">
+            <input type="hidden" name="user_id" th:value="${user.id}">
+            <input type="hidden" name="city_id" th:value="${city.id}">
+            <button style="color: green">ADD +</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

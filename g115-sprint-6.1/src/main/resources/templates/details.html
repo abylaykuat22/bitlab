@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <h1 th:text="${zayavka.handled == true ? 'Заявка отработана' : 'Заявка не отработана'}"
+     th:style="${zayavka.handled == true ? 'color:green' : 'color:red'}"></h1>
+  <form action="/edit-app-req" method="post">
+    <input type="text" name="id" th:value="${zayavka.id}" readonly>
+    <input type="text" name="userName" th:value="${zayavka.userName}"><br><br>
+    <select name="course">
+      <option th:each="kurs : ${kursy}"
+              th:text="${kurs.name}"
+              th:value="${kurs.id}"
+              th:selected="${kurs.id == zayavka.course.id}"
+      ></option>
+    </select>
+    <input type="hidden" name="comment.id" th:value="${zayavka.comment.id}">
+    <input type="text" name="comment.comment" th:value="${zayavka.comment.comment}"><br><br>
+    <input type="text" name="phone" th:value="${zayavka.phone}"><br><br>
+    <button>EDIT APPLICATION REQUEST</button>
+  </form>
+  <form th:action="${'/delete-app-req/' + zayavka.id}" method="post">
+    <button>DELETE APPLICATION REQUEST</button>
+  </form>
+</body>
+</html>
