@@ -1,0 +1,9 @@
+-- liquibase formatted sql
+
+--changeset jax:1
+ALTER TABLE IF EXISTS items
+ADD COLUMN DESCRIPTION VARCHAR(100);
+
+--changeset jax:2
+ALTER TABLE IF EXISTS items
+ALTER COLUMN DESCRIPTION TYPE VARCHAR(500);
