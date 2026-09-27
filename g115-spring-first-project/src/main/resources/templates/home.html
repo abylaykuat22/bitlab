@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <table cellpadding="10px">
+    <thead>
+      <th>ID</th>
+      <th>NAME</th>
+      <th>DESCRIPTION</th>
+      <th>PRICE</th>
+      <th>DETAILS</th>
+    </thead>
+    <tbody>
+      <tr th:each="item : ${veshy}">
+        <td th:text="${item.id}"></td>
+        <td th:text="${item.name}"></td>
+        <td th:text="${item.description}"></td>
+        <td th:text="${item.price}"></td>
+      </tr>
+    </tbody>
+  </table>
+  <form action="/add-item" method="post">
+    <input type="text" name="name" placeholder="Insert name..."><br><br>
+    <input type="text" name="description" placeholder="Insert description..."><br><br>
+    <input type="number" name="price" placeholder="Insert price..."><br><br>
+    <button>ADD ITEM</button>
+  </form>
+</body>
+</html>
