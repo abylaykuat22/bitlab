@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <h1>Details page</h1>
+  <form action="/edit-student" method="post">
+    <input type="hidden" name="student_id" th:value="${student.id}" >
+    <input type="text" name="student_name" th:value="${student.name}" placeholder="Insert name:"><br><br>
+    <input type="text" name="student_surname" th:value="${student.surname}" placeholder="Insert surname:"><br><br>
+    <input type="number" name="student_exam" th:value="${student.exam}" placeholder="Insert exam:"><br><br>
+    <input type="text" th:value="${student.mark}" disabled><br><br>
+    <button>EDIT STUDENT</button>
+  </form>
+
+  <form th:action="${'/delete-student/'+student.id}" method="post">
+    <button>DELETE</button>
+  </form>
+</body>
+</html>
